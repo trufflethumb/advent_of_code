@@ -32,4 +32,11 @@ final class Day01Tests: XCTestCase {
         """
         XCTAssertEqual(sumCalibrationDocumentValues(input), 142)
     }
+//
+//    func test_examplePartTwo_line1() {
+//        let input = "two1nine"
+//        let tries = TrieNode(string: "one")
+//        print(tries)
+//        XCTAssertEqual(getCalibration(input), 29)
+//    }
 }
