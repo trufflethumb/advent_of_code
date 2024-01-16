@@ -33,10 +33,10 @@ public class TrieNode: CustomStringConvertible {
     }
 
     public func contains(string: String) -> Bool {
-        contains(Array(string))
+        contains(array: Array(string))
     }
 
-    private func contains(_ array: [Character]) -> Bool {
+    public func contains(array: [Character]) -> Bool {
         guard !array.isEmpty else { return true }
         guard array[0] == value else { return false }
 
@@ -72,15 +72,30 @@ public struct NumbersTrie {
         return dict
     }()
 
+    public static func contains(_ input: [Character]) -> Bool {
+        let char = input[input.startIndex]
+        return tries[char]?.contains(array: input) ?? false
+    }
+
     public static func contains(_ input: String) -> Bool {
         let char = input[input.startIndex]
-        print(tries)
         return tries[char]?.contains(string: input) ?? false
     }
 
 }
 
 public func getCalibration(_ input: String) -> Int {
+    let input = Array(input)
+    var l = 0
+    var r = 0
+
+    while l < input.count - 1 && r < input.count - 1 {
+        r += 3
+        let result = Array(input[l...r])
+        while NumbersTrie.contains(result) {
+            r += 1
+        }
+    }
 
     var lhs: Int!
     var rhs: Int!
