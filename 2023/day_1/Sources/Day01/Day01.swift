@@ -57,16 +57,28 @@ public class TrieNode: CustomStringConvertible {
     }
 }
 
-//public let speltOut = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-//
-//let tries = {
-//    let main = TrieNode(string: speltOut[0])
-//    for string in speltOut.dropFirst() {
-//        main.add(Array(string))
-//    }
-//}()
+public struct NumbersTrie {
 
+    public static let speltOut = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
+    public static let tries: [Character: TrieNode] = {
+        var dict = [Character: TrieNode]()
+        for string in speltOut {
+            let char = string[string.startIndex]
+            let value = dict[char, default: TrieNode(value: char)]
+            dict[char] = value
+            value.add(string: String(string.dropFirst()))
+        }
+        return dict
+    }()
+
+    public static func contains(_ input: String) -> Bool {
+        let char = input[input.startIndex]
+        print(tries)
+        return tries[char]?.contains(string: input) ?? false
+    }
+
+}
 
 public func getCalibration(_ input: String) -> Int {
 
