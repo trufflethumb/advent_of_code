@@ -68,6 +68,11 @@ final class Day01Tests: XCTestCase {
         XCTAssertEqual(getCalibration(input), 76)
     }
 
+    func test_empty_shouldBe0() {
+        let input = ""
+        XCTAssertEqual(getCalibration(input), 0)
+    }
+
     func test_exampleInputPartTwo() {
         let input = """
         two1nine

@@ -14,6 +14,7 @@ let dict = [
 ]
 
 public func getCalibration(_ input: String) -> Int {
+    guard !input.isEmpty else { return 0 }
     var lhs: Int!
     var rhs: Int!
     let input = Array(input)
