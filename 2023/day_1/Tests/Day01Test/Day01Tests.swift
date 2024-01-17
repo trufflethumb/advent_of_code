@@ -67,4 +67,24 @@ final class Day01Tests: XCTestCase {
         let input = "7pqrstsixteen"
         XCTAssertEqual(getCalibration(input), 76)
     }
+
+    func test_exampleInputPartTwo() {
+        let input = """
+        two1nine
+        eightwothree
+        abcone2threexyz
+        xtwone3four
+        4nineeightseven2
+        zoneight234
+        7pqrstsixteen
+        """
+        XCTAssertEqual(sumCalibrationDocumentValues(input), 281)
+    }
+
+    func test_randomTestCases() {
+        XCTAssertEqual(getCalibration("cbcvd9"), 99)
+        XCTAssertEqual(getCalibration("eight7vcmhfqznbccrvl4onehfqmjone1"), 81)
+        XCTAssertEqual(getCalibration("342"), 32)
+        XCTAssertEqual(getCalibration("x8"), 88)
+    }
 }

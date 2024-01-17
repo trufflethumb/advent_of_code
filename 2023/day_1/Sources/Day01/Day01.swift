@@ -19,10 +19,14 @@ public func getCalibration(_ input: String) -> Int {
     let input = Array(input)
     var i = input.startIndex
     var j = i
-    while i < input.endIndex && j < input.endIndex {
+    while i < input.endIndex {
         if input[i].isNumber {
             lhs = Int(String(input[i]))!
             break
+        }
+        guard j < input.endIndex else {
+            i = input.index(after: i)
+            continue
         }
         if let number = dict[String(input[i...j])] {
             lhs = number
@@ -36,10 +40,14 @@ public func getCalibration(_ input: String) -> Int {
     }
     j = input.index(before: input.endIndex)
     i = j
-    while i >= input.startIndex && j >= input.startIndex {
+    while i >= input.startIndex {
         if input[i].isNumber {
             rhs = Int(String(input[i]))!
             break
+        }
+        guard j >= input.startIndex else {
+            i = input.index(before: j)
+            continue
         }
         if let number = dict[String(input[i...j])] {
             rhs = number
@@ -50,6 +58,10 @@ public func getCalibration(_ input: String) -> Int {
             i = input.index(before: j)
             j = i
         }
+    }
+
+    if lhs == nil || rhs == nil {
+        fatalError("One of the numbers was not found")
     }
     return lhs * 10 + rhs
 }
