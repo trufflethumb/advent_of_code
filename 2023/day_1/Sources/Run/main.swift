@@ -7,3 +7,5 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 
 let content = try String(contentsOf: input)
 print(sumCalibrationDocumentValues(content))
+
+// part two wrong answers: 54953

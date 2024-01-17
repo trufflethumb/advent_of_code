@@ -91,5 +91,14 @@ final class Day01Tests: XCTestCase {
         XCTAssertEqual(getCalibration("eight7vcmhfqznbccrvl4onehfqmjone1"), 81)
         XCTAssertEqual(getCalibration("342"), 32)
         XCTAssertEqual(getCalibration("x8"), 88)
+        XCTAssertEqual(getCalibration("8x"), 88)
+        XCTAssertEqual(getCalibration("ffour87fqrvqxqlqrrk"), 47)
+        XCTAssertEqual(getCalibration("hfbcbhbxgzjqjspxlpnbppjsfcvqvkgxd22"), 22)
+        XCTAssertEqual(getCalibration("two"), 22)
+    }
+
+    func test_randomTestCases2() {
+        XCTAssertEqual(getCalibration("5eightwox"), 58)
+        XCTAssertEqual(getCalibration("eightwo"), 88)
     }
 }

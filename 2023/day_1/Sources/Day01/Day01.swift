@@ -22,47 +22,32 @@ public func getCalibration(_ input: String) -> Int {
     var j = i
     while i < input.endIndex {
         if input[i].isNumber {
-            lhs = Int(String(input[i]))!
-            break
-        }
-        guard j < input.endIndex else {
-            i = input.index(after: i)
+            if lhs == nil {
+                lhs = Int(String(input[i]))!
+            } else {
+                rhs = Int(String(input[i]))!
+            }
+        } else if let number = dict[String(input[i...j])] {
+            if lhs == nil {
+                lhs = number
+            } else {
+                rhs = number
+            }
+            i = j + 1
+            j = i
             continue
-        }
-        if let number = dict[String(input[i...j])] {
-            lhs = number
-            break
         }
         j = input.index(after: j)
-        if j - i == 5 {
+        if j == input.endIndex {
             i = input.index(after: i)
             j = i
         }
     }
-    j = input.index(before: input.endIndex)
-    i = j
-    while i >= input.startIndex {
-        if input[i].isNumber {
-            rhs = Int(String(input[i]))!
-            break
-        }
-        guard j >= input.startIndex else {
-            i = input.index(before: j)
-            continue
-        }
-        if let number = dict[String(input[i...j])] {
-            rhs = number
-            break
-        }
-        i = input.index(before: i)
-        if j - i == 5 {
-            i = input.index(before: j)
-            j = i
-        }
-    }
-
-    if lhs == nil || rhs == nil {
+    if lhs == nil {
         fatalError("One of the numbers was not found")
+    }
+    if rhs == nil {
+        rhs = lhs
     }
     return lhs * 10 + rhs
 }
