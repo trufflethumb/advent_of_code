@@ -1,114 +1,54 @@
 import Foundation
 
-public class TrieNode: CustomStringConvertible {
-
-    public init(value: Character) {
-        self.value = value
-    }
-
-    public init(string: String) {
-        let array = Array(string)
-        self.value = array[0]
-        add(Array(array.dropFirst()))
-    }
-
-    let value: Character
-    public var children = [TrieNode]()
-
-    public func add(string: String) {
-        add(Array(string))
-    }
-
-    private func add(_ array: [Character]) {
-        guard let first = array.first else { return }
-        for child in children {
-            if child.value == first {
-                child.add(Array(array.dropFirst()))
-                return
-            }
-        }
-        let newChild = TrieNode(value: first)
-        children.append(newChild)
-        add(array)
-    }
-
-    public func contains(string: String) -> Bool {
-        contains(array: Array(string))
-    }
-
-    public func contains(array: [Character]) -> Bool {
-        guard !array.isEmpty else { return true }
-        guard array[0] == value else { return false }
-
-        let next = array.dropFirst()
-
-        guard !next.isEmpty else { return true }
-
-        for child in children {
-            if child.contains(Array(next)) {
-                return true
-            }
-        }
-        return false
-    }
-
-    public var description: String {
-        String(value) + children.map(\.description).joined()
-    }
-}
-
-public struct NumbersTrie {
-
-    public static let speltOut = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-
-    public static let tries: [Character: TrieNode] = {
-        var dict = [Character: TrieNode]()
-        for string in speltOut {
-            let char = string[string.startIndex]
-            let value = dict[char, default: TrieNode(value: char)]
-            dict[char] = value
-            value.add(string: String(string.dropFirst()))
-        }
-        return dict
-    }()
-
-    public static func contains(_ input: [Character]) -> Bool {
-        let char = input[input.startIndex]
-        return tries[char]?.contains(array: input) ?? false
-    }
-
-    public static func contains(_ input: String) -> Bool {
-        let char = input[input.startIndex]
-        return tries[char]?.contains(string: input) ?? false
-    }
-
-}
+let dict = [
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "zero": 0,
+]
 
 public func getCalibration(_ input: String) -> Int {
-    let input = Array(input)
-    var l = 0
-    var r = 0
-
-    while l < input.count - 1 && r < input.count - 1 {
-        r += 3
-        let result = Array(input[l...r])
-        while NumbersTrie.contains(result) {
-            r += 1
-        }
-    }
-
     var lhs: Int!
     var rhs: Int!
-    for c in input {
-        if c.isNumber {
-            lhs = Int(String(c))!
+    let input = Array(input)
+    var i = input.startIndex
+    var j = i
+    while i < input.endIndex && j < input.endIndex {
+        if input[i].isNumber {
+            lhs = Int(String(input[i]))!
             break
         }
-    }
-    for c in input.reversed() {
-        if c.isNumber {
-            rhs = Int(String(c))!
+        if let number = dict[String(input[i...j])] {
+            lhs = number
             break
+        }
+        j = input.index(after: j)
+        if j - i == 5 {
+            i = input.index(after: i)
+            j = i
+        }
+    }
+    j = input.index(before: input.endIndex)
+    i = j
+    while i >= input.startIndex && j >= input.startIndex {
+        if input[i].isNumber {
+            rhs = Int(String(input[i]))!
+            break
+        }
+        if let number = dict[String(input[i...j])] {
+            rhs = number
+            break
+        }
+        i = input.index(before: i)
+        if j - i == 5 {
+            i = input.index(before: j)
+            j = i
         }
     }
     return lhs * 10 + rhs
