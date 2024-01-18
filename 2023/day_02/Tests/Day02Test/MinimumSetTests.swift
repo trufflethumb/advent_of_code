@@ -1,11 +1,6 @@
 import Day02
 import XCTest
 
-func minimumSet(_ input: String) -> (red: Int, green: Int, blue: Int) {
-    let game = parseGame(input)
-    return (game.reds, game.greens, game.blues)
-}
-
 final class MinimumSetTests: XCTestCase {
     func test_examplePartTwo_line1() {
         let input = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"

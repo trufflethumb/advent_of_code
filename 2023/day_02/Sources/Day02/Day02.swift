@@ -58,3 +58,8 @@ public func sumIDs(_ input: String) -> Int {
         .map(\.id)
         .reduce(0, +)
 }
+
+public func minimumSet(_ input: String) -> (red: Int, green: Int, blue: Int) {
+    let game = parseGame(input)
+    return (game.reds, game.greens, game.blues)
+}
