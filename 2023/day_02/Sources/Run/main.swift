@@ -7,4 +7,8 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 
 let content = try String(contentsOf: input)
 
+// Part 1
 print(sumIDs(content))
+
+// Part 2
+print(sumPowers(content))
