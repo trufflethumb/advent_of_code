@@ -14,12 +14,25 @@ public enum Cube: String {
 
 public struct Game {
     public let id: Int
-    private(set) var cubes: [Cube: Int] = [:]
+    public private(set) var cubes: [Cube: Int] = [:]
     public var isPossible = true
 
     mutating func add(_ cube: Cube, count: Int) {
-        cubes[cube] = count
+        let existing = cubes[cube, default: Int.min]
+        cubes[cube] = max(existing, count)
         isPossible = isPossible && count <= cube.limit
+    }
+
+    public var reds: Int {
+        cubes[.red] ?? 0
+    }
+
+    public var greens: Int {
+        cubes[.green] ?? 0
+    }
+
+    public var blues: Int {
+        cubes[.blue] ?? 0
     }
 }
 
