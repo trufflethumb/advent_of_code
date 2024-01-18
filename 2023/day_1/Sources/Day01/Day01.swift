@@ -10,62 +10,34 @@ let dict = [
     "seven": 7,
     "eight": 8,
     "nine": 9,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
 ]
 
 public func getCalibration(_ input: String) -> Int {
     guard !input.isEmpty else { return 0 }
+    let input = Array(input)
     var lhs: Int!
     var rhs: Int!
-    let input = Array(input)
-    var i = input.startIndex
-    var j = i
-    while i < input.endIndex {
-        if input[i].isNumber {
-            lhs = Int(String(input[i]))!
-            break
+    var lhsIndex = input.endIndex
+    var rhsIndex = -1
+    for number in dict.keys {
+        let ranges = input.ranges(of: number)
+        if let first = ranges.first, first.lowerBound < lhsIndex {
+            lhs = dict[String(input[first]), default: 0]
+            lhsIndex = first.lowerBound
         }
-        guard j < input.endIndex else {
-            i = input.index(after: i)
-            j = i
-            continue
+        if let last = ranges.last, last.lowerBound > rhsIndex {
+            rhs = dict[String(input[last]), default: 0]
+            rhsIndex = last.lowerBound
         }
-        if let number = dict[String(input[i...j])] {
-            lhs = number
-            break
-        }
-        j = input.index(after: j)
-        if j - i == 5 {
-            i = input.index(after: i)
-            j = i
-        }
-    }
-    j = input.index(before: input.endIndex)
-    i = j
-    while i >= input.startIndex {
-        if input[i].isNumber {
-            rhs = Int(String(input[i]))!
-            break
-        }
-        guard j >= input.startIndex else {
-            i = input.index(before: i)
-            j = i
-            continue
-        }
-        if let number = dict[String(input[i...j])] {
-            rhs = number
-            break
-        }
-        i = input.index(before: i)
-        if j - i == 5 {
-            j = input.index(before: j)
-            i = j
-        }
-    }
-
-    if lhs == nil {
-        fatalError("lhs was not found")
-    } else if rhs == nil {
-        rhs = lhs
     }
     return lhs * 10 + rhs
 }

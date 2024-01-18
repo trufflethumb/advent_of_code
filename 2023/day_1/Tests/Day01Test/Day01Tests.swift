@@ -88,10 +88,8 @@ final class Day01Tests: XCTestCase {
 
     func test_randomTestCases() {
         XCTAssertEqual(getCalibration("cbcvd9"), 99)
-        XCTAssertEqual(getCalibration("eight7vcmhfqznbccrvl4onehfqmjone1"), 81)
         XCTAssertEqual(getCalibration("342"), 32)
         XCTAssertEqual(getCalibration("x8"), 88)
-        XCTAssertEqual(getCalibration("8x"), 88)
         XCTAssertEqual(getCalibration("ffour87fqrvqxqlqrrk"), 47)
         XCTAssertEqual(getCalibration("hfbcbhbxgzjqjspxlpnbppjsfcvqvkgxd22"), 22)
         XCTAssertEqual(getCalibration("two"), 22)
@@ -99,9 +97,11 @@ final class Day01Tests: XCTestCase {
         XCTAssertEqual(getCalibration("8six8"), 88)
         XCTAssertEqual(getCalibration("5eightwox"), 52)
         XCTAssertEqual(getCalibration("eightwo"), 82)
+        XCTAssertEqual(getCalibration("rhcdx54"), 54)
+        XCTAssertEqual(getCalibration("eight7vcmhfqznbccrvl4onehfqmjone1"), 81)
     }
 
     func test_randomTestCases2() {
-        XCTAssertEqual(getCalibration("rhcdx54"), 54)
+        XCTAssertEqual(getCalibration("8x"), 88)
     }
 }

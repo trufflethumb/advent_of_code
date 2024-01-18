@@ -8,7 +8,10 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 let content = try String(contentsOf: input)
 let answer = sumCalibrationDocumentValues(content)
 let wrongAnswers = [54953, 54960]
-if wrongAnswers.contains(answer) {
+let rightAnswerPartTwo = 54925
+if rightAnswerPartTwo == answer {
+    print("You got it right, it is \(answer)")
+} else if wrongAnswers.contains(answer) {
     print("Ended up with one of the previously wrong answers: \(answer)")
 } else {
     print("New answer: \(answer)")
