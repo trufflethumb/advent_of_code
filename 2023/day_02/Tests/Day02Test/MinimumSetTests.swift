@@ -34,4 +34,11 @@ final class MinimumSetTests: XCTestCase {
         XCTAssertEqual(minimumSet(input).green, 3)
         XCTAssertEqual(minimumSet(input).blue, 15)
     }
+
+    func test_examplePartTwo_line5() {
+        let input = "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"
+        XCTAssertEqual(minimumSet(input).red, 6)
+        XCTAssertEqual(minimumSet(input).green, 3)
+        XCTAssertEqual(minimumSet(input).blue, 2)
+    }
 }
