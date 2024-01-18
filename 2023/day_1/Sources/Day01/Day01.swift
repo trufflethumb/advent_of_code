@@ -10,7 +10,6 @@ let dict = [
     "seven": 7,
     "eight": 8,
     "nine": 9,
-    "zero": 0,
 ]
 
 public func getCalibration(_ input: String) -> Int {
@@ -22,31 +21,50 @@ public func getCalibration(_ input: String) -> Int {
     var j = i
     while i < input.endIndex {
         if input[i].isNumber {
-            if lhs == nil {
-                lhs = Int(String(input[i]))!
-            } else {
-                rhs = Int(String(input[i]))!
-            }
-        } else if let number = dict[String(input[i...j])] {
-            if lhs == nil {
-                lhs = number
-            } else {
-                rhs = number
-            }
-            i = j + 1
+            lhs = Int(String(input[i]))!
+            break
+        }
+        guard j < input.endIndex else {
+            i = input.index(after: i)
             j = i
             continue
         }
+        if let number = dict[String(input[i...j])] {
+            lhs = number
+            break
+        }
         j = input.index(after: j)
-        if j == input.endIndex {
+        if j - i == 5 {
             i = input.index(after: i)
             j = i
         }
     }
-    if lhs == nil {
-        fatalError("One of the numbers was not found")
+    j = input.index(before: input.endIndex)
+    i = j
+    while i >= input.startIndex {
+        if input[i].isNumber {
+            rhs = Int(String(input[i]))!
+            break
+        }
+        guard j >= input.startIndex else {
+            i = input.index(before: i)
+            j = i
+            continue
+        }
+        if let number = dict[String(input[i...j])] {
+            rhs = number
+            break
+        }
+        i = input.index(before: i)
+        if j - i == 5 {
+            j = input.index(before: j)
+            i = j
+        }
     }
-    if rhs == nil {
+
+    if lhs == nil {
+        fatalError("lhs was not found")
+    } else if rhs == nil {
         rhs = lhs
     }
     return lhs * 10 + rhs

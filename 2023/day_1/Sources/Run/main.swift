@@ -6,6 +6,10 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 }
 
 let content = try String(contentsOf: input)
-print(sumCalibrationDocumentValues(content))
-
-// part two wrong answers: 54953
+let answer = sumCalibrationDocumentValues(content)
+let wrongAnswers = [54953, 54960]
+if wrongAnswers.contains(answer) {
+    print("Ended up with one of the previously wrong answers: \(answer)")
+} else {
+    print("New answer: \(answer)")
+}
