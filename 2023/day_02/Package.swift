@@ -11,7 +11,7 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .executableTarget(name: "Run", dependencies: ["Day02"]),
+        .executableTarget(name: "Run", dependencies: ["Day02"], resources: [.process("Resources/input.txt")]),
         .target(name: "Day02"),
         .testTarget(name: "Day02Test", dependencies: ["Day02"])
     ]
