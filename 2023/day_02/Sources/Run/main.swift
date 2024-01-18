@@ -1,4 +1,7 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+import Foundation
 
-print("Hello, world!")
+guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") else {
+    fatalError("Unable to find file")
+}
+
+let content = try String(contentsOf: input)
