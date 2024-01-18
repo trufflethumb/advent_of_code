@@ -62,4 +62,10 @@ final class Day02Tests: XCTestCase {
         XCTAssertEqual(determinePossibility(input).id, 4)
         XCTAssertFalse(determinePossibility(input).isPossible)
     }
+    
+    func test_example_line5() {
+        let input = "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"
+        XCTAssertEqual(determinePossibility(input).id, 5)
+        XCTAssertTrue(determinePossibility(input).isPossible)
+    }
 }
