@@ -27,3 +27,11 @@ public func determinePossibility(_ input: String) -> (id: Int, isPossible: Bool)
     }
     return (id, true)
 }
+
+public func sumIDs(_ input: String) -> Int {
+    input.components(separatedBy: .newlines)
+        .map(determinePossibility)
+        .filter(\.isPossible)
+        .map(\.id)
+        .reduce(0, +)
+}
