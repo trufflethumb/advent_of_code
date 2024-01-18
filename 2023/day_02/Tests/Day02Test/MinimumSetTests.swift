@@ -1,3 +1,4 @@
+import Day02
 import XCTest
 
 func minimumSet(_ input: String) -> (red: Int, green: Int, blue: Int) {

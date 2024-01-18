@@ -12,25 +12,35 @@ public enum Cube: String {
     }
 }
 
-public func determinePossibility(_ input: String) -> (id: Int, isPossible: Bool) {
+public struct Game {
+    public let id: Int
+    private(set) var cubes: [Cube: Int] = [:]
+    public var isPossible = true
+
+    mutating func add(_ cube: Cube, count: Int) {
+        cubes[cube] = count
+        isPossible = isPossible && count <= cube.limit
+    }
+}
+
+public func parseGame(_ input: String) -> Game {
     let components = input.components(separatedBy: ": ")
     let id = Int(components[0].components(separatedBy: .whitespaces)[1])!
+    var game = Game(id: id)
     for draw in components[1].components(separatedBy: "; ") {
         for cubeType in draw.components(separatedBy: ", ") {
             let statement = cubeType.components(separatedBy: " ")
             let count = Int(statement[0])!
-            let color = Cube(rawValue: statement[1])!
-            if count > color.limit {
-                return (id, false)
-            }
+            let cube = Cube(rawValue: statement[1])!
+            game.add(cube, count: count)
         }
     }
-    return (id, true)
+    return game
 }
 
 public func sumIDs(_ input: String) -> Int {
     input.components(separatedBy: .newlines)
-        .map(determinePossibility)
+        .map(parseGame)
         .filter(\.isPossible)
         .map(\.id)
         .reduce(0, +)
