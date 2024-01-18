@@ -14,8 +14,8 @@ public enum Cube: String {
 
 public struct Game {
     public let id: Int
-    public private(set) var cubes: [Cube: Int] = [:]
-    public var isPossible = true
+    private(set) var cubes: [Cube: Int] = [:]
+    public private(set) var isPossible = true
 
     mutating func add(_ cube: Cube, count: Int) {
         let existing = cubes[cube, default: Int.min]
