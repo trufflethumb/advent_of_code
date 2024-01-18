@@ -7,6 +7,7 @@ final class MinimumSetTests: XCTestCase {
         XCTAssertEqual(minimumSet(input).red, 4)
         XCTAssertEqual(minimumSet(input).green, 2)
         XCTAssertEqual(minimumSet(input).blue, 6)
+        XCTAssertEqual(power(input), 48)
     }
 
     func test_examplePartTwo_line2() {
@@ -14,6 +15,7 @@ final class MinimumSetTests: XCTestCase {
         XCTAssertEqual(minimumSet(input).red, 1)
         XCTAssertEqual(minimumSet(input).green, 3)
         XCTAssertEqual(minimumSet(input).blue, 4)
+        XCTAssertEqual(power(input), 12)
     }
     
     func test_examplePartTwo_line3() {
@@ -21,6 +23,7 @@ final class MinimumSetTests: XCTestCase {
         XCTAssertEqual(minimumSet(input).red, 20)
         XCTAssertEqual(minimumSet(input).green, 13)
         XCTAssertEqual(minimumSet(input).blue, 6)
+        XCTAssertEqual(power(input), 1560)
     }
 
     func test_examplePartTwo_line4() {
@@ -28,6 +31,7 @@ final class MinimumSetTests: XCTestCase {
         XCTAssertEqual(minimumSet(input).red, 14)
         XCTAssertEqual(minimumSet(input).green, 3)
         XCTAssertEqual(minimumSet(input).blue, 15)
+        XCTAssertEqual(power(input), 630)
     }
 
     func test_examplePartTwo_line5() {
@@ -35,5 +39,6 @@ final class MinimumSetTests: XCTestCase {
         XCTAssertEqual(minimumSet(input).red, 6)
         XCTAssertEqual(minimumSet(input).green, 3)
         XCTAssertEqual(minimumSet(input).blue, 2)
+        XCTAssertEqual(power(input), 36)
     }
 }

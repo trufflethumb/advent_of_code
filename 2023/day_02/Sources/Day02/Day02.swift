@@ -34,6 +34,10 @@ public struct Game {
     public var blues: Int {
         cubes[.blue] ?? 0
     }
+
+    public var power: Int {
+        reds * greens * blues
+    }
 }
 
 public func parseGame(_ input: String) -> Game {
@@ -62,4 +66,8 @@ public func sumIDs(_ input: String) -> Int {
 public func minimumSet(_ input: String) -> (red: Int, green: Int, blue: Int) {
     let game = parseGame(input)
     return (game.reds, game.greens, game.blues)
+}
+
+public func power(_ input: String) -> Int {
+    parseGame(input).power
 }
