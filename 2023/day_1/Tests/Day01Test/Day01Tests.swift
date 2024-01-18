@@ -95,10 +95,12 @@ final class Day01Tests: XCTestCase {
         XCTAssertEqual(getCalibration("ffour87fqrvqxqlqrrk"), 47)
         XCTAssertEqual(getCalibration("hfbcbhbxgzjqjspxlpnbppjsfcvqvkgxd22"), 22)
         XCTAssertEqual(getCalibration("two"), 22)
+        XCTAssertEqual(getCalibration("19seven"), 17)
+        XCTAssertEqual(getCalibration("8six8"), 88)
     }
 
     func test_randomTestCases2() {
-        XCTAssertEqual(getCalibration("5eightwox"), 58)
-        XCTAssertEqual(getCalibration("eightwo"), 88)
+        XCTAssertEqual(getCalibration("5eightwox"), 52)
+        XCTAssertEqual(getCalibration("eightwo"), 82)
     }
 }
