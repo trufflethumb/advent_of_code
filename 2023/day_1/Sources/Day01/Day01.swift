@@ -28,14 +28,14 @@ public func getCalibration(_ input: String) -> Int {
     var rhs: Int!
     var lhsIndex = input.endIndex
     var rhsIndex = -1
-    for number in dict.keys {
+    for (number, value) in dict {
         let ranges = input.ranges(of: number)
         if let first = ranges.first, first.lowerBound < lhsIndex {
-            lhs = dict[String(input[first]), default: 0]
+            lhs = value
             lhsIndex = first.lowerBound
         }
         if let last = ranges.last, last.lowerBound > rhsIndex {
-            rhs = dict[String(input[last]), default: 0]
+            rhs = value
             rhsIndex = last.lowerBound
         }
     }
