@@ -9,30 +9,72 @@ import Day03
 import XCTest
 
 func findParts(_ input: String) -> [Int] {
-    let input = if let last = input.last, last != "\n" {
-        Array(input) + ["\n"]
+    let input = Array(input)
+    let width = if let lineWidth = input.firstIndex(of: "\n") {
+        lineWidth + 1
     } else {
-        Array(input)
+        input.count
     }
-
-    // find the width
-    let width = input.firstIndex(of: "\n")!
-
-    // find the *
-    if let index = input.firstIndex(of: "*") {
-        // go left by width
-        var upDirectionIndex = input.index(index, offsetBy: -(width + 1))
-        // go left until \n
-        var result: [Character] = []
-        while upDirectionIndex >= 0 {
-            if input[upDirectionIndex].isNumber {
-                result.insert(input[upDirectionIndex], at: 0)
+    var numbers = [Range<Int>: Int]()
+    var symbols = [Int]()
+    var currentNumbers = [Character]()
+    var currentNumberStart: Int?
+    for (index, char) in input.enumerated() {
+        if char.isNumber {
+            currentNumbers.append(char)
+            if currentNumberStart == nil {
+                currentNumberStart = index
             }
-            upDirectionIndex -= 1
+        } else {
+            if let numberStart = currentNumberStart {
+                numbers[numberStart..<index] = Int(String(currentNumbers))
+                currentNumbers.removeAll()
+                currentNumberStart = nil
+            }
+            if char == "*" {
+                symbols.append(index)
+            }
         }
-        return [Int(String(result))!]
     }
-    return []
+
+    var parts = [Int]()
+
+    for symbol in symbols {
+        for (range, number) in numbers {
+            if findIntersection(symbolIndex: symbol, range: range, width: width, endIndex: input.endIndex) {
+                parts.append(number)
+            }
+        }
+    }
+    return parts
+}
+
+func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, endIndex: Int) -> Bool {
+    let searchIndices = [
+        // top left
+        symbolIndex - width - 1,
+        // top mid
+        symbolIndex - width,
+        // top right
+        symbolIndex - width + 1,
+        // left
+        symbolIndex - 1,
+        // right
+        symbolIndex + 1,
+        // bot left
+        symbolIndex + width - 1,
+        // bot mid
+        symbolIndex + width,
+        // bot right
+        symbolIndex + width + 1,
+    ]
+    for searchIndex in searchIndices {
+        guard (0 ..< endIndex).contains(searchIndex) else { continue }
+        if range.contains(searchIndex) { 
+            return true
+        }
+    }
+    return false
 }
 
 final class Day03Tests: XCTestCase {
@@ -47,5 +89,14 @@ final class Day03Tests: XCTestCase {
         ...*......
         """
         XCTAssertEqual(findParts(input), [467])
+    }    
+
+    func test_example_line3() {
+        let input = """
+        467..114..
+        ...*......
+        ..35..633.
+        """
+        XCTAssertEqual(findParts(input), [467, 35])
     }
 }
