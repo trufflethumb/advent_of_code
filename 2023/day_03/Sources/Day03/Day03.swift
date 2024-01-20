@@ -1,14 +1,14 @@
 import Foundation
 
-public func findParts(_ input: String) -> [Int: Int] {
+public func findParts(_ input: String) -> [Int] {
     let input = Array(input)
     let width = if let lineWidth = input.firstIndex(of: "\n") {
         lineWidth + 1
     } else {
         input.count
     }
-    let symbolsToSearch = Set<Character>(["*", "#", "+", "$"])
     var numbers = [Range<Int>: Int]()
+    let symbolExceptions = Set<Character>(["\n", "."])
     var symbols = [Int]()
     var currentNumbers = [Character]()
     var currentNumberStart: Int?
@@ -24,18 +24,18 @@ public func findParts(_ input: String) -> [Int: Int] {
                 currentNumbers.removeAll()
                 currentNumberStart = nil
             }
-            if symbolsToSearch.contains(char) {
+            if !char.isNumber && !symbolExceptions.contains(char) {
                 symbols.append(index)
             }
         }
     }
 
-    var parts = [Int: Int]()
+    var parts = [Int]()
 
     for symbol in symbols {
         for (range, number) in numbers {
             if findIntersection(symbolIndex: symbol, range: range, width: width, endIndex: input.endIndex) {
-                parts[number, default: 0] += 1
+                parts.append(number)
             }
         }
     }
@@ -68,12 +68,4 @@ public func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, en
         }
     }
     return false
-}
-
-public func sumParts(_ parts: [Int: Int]) -> Int {
-    var sum = 0
-    for (key, value) in parts {
-        sum += key * value
-    }
-    return sum
 }
