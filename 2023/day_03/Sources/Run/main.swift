@@ -10,10 +10,13 @@ let content = try String(contentsOf: input)
 // Part 1
 let wrongAnswers = [424683: "too low"]
 let result = findParts(content).reduce(0, +)
+let answer = 540212
 if let found = wrongAnswers[result] {
     print("Got one of the wrong results: \(result) is \(found)")
+} else if answer == result {
+    print("You got it right: \(answer)")
 } else {
-    print("New result, try it! \(result)")
+    print("New wrong results: \(result)")
 }
 
 // Part 2
