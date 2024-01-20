@@ -8,13 +8,14 @@
 import Day03
 import XCTest
 
-func findParts(_ input: String) -> [Int] {
+func findParts(_ input: String) -> Set<Int> {
     let input = Array(input)
     let width = if let lineWidth = input.firstIndex(of: "\n") {
         lineWidth + 1
     } else {
         input.count
     }
+    let symbolsToSearch = Set<Character>(["*", "#", "+", "$"])
     var numbers = [Range<Int>: Int]()
     var symbols = [Int]()
     var currentNumbers = [Character]()
@@ -31,18 +32,18 @@ func findParts(_ input: String) -> [Int] {
                 currentNumbers.removeAll()
                 currentNumberStart = nil
             }
-            if char == "*" {
+            if symbolsToSearch.contains(char) {
                 symbols.append(index)
             }
         }
     }
 
-    var parts = [Int]()
+    var parts = Set<Int>()
 
     for symbol in symbols {
         for (range, number) in numbers {
             if findIntersection(symbolIndex: symbol, range: range, width: width, endIndex: input.endIndex) {
-                parts.append(number)
+                parts.insert(number)
             }
         }
     }
@@ -98,5 +99,15 @@ final class Day03Tests: XCTestCase {
         ..35..633.
         """
         XCTAssertEqual(findParts(input), [467, 35])
+    }
+
+    func test_example_line4() {
+        let input = """
+        467..114..
+        ...*......
+        ..35..633.
+        ......#...
+        """
+        XCTAssertEqual(findParts(input), [467, 35, 633])
     }
 }
