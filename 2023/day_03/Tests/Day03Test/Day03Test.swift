@@ -83,14 +83,14 @@ final class Day03Tests: XCTestCase {
         let input = "467..114.."
         XCTAssertEqual(findParts(input), [])
     }
-    
+
     func test_example_line2() {
         let input = """
         467..114..
         ...*......
         """
         XCTAssertEqual(findParts(input), [467])
-    }    
+    }
 
     func test_example_line3() {
         let input = """
@@ -120,5 +120,21 @@ final class Day03Tests: XCTestCase {
         617*......
         """
         XCTAssertEqual(findParts(input), [467, 35, 633, 617])
+    }
+
+    func test_example_line6ToEnd() {
+        let input = """
+        467..114..
+        ...*......
+        ..35..633.
+        ......#...
+        617*......
+        .....+.58.
+        ..592.....
+        ......755.
+        ...$.*....
+        .664.598..
+        """
+        XCTAssertEqual(findParts(input), [467, 35, 633, 617, 592, 755, 664, 598])
     }
 }
