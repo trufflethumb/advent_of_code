@@ -8,7 +8,7 @@
 import Day03
 import XCTest
 
-func findParts(_ input: String) -> Set<Int> {
+func findParts(_ input: String) -> [Int: Int] {
     let input = Array(input)
     let width = if let lineWidth = input.firstIndex(of: "\n") {
         lineWidth + 1
@@ -38,12 +38,12 @@ func findParts(_ input: String) -> Set<Int> {
         }
     }
 
-    var parts = Set<Int>()
+    var parts = [Int: Int]()
 
     for symbol in symbols {
         for (range, number) in numbers {
             if findIntersection(symbolIndex: symbol, range: range, width: width, endIndex: input.endIndex) {
-                parts.insert(number)
+                parts[number, default: 0] += 1
             }
         }
     }
@@ -81,7 +81,7 @@ func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, endIndex:
 final class Day03Tests: XCTestCase {
     func test_example_line1() {
         let input = "467..114.."
-        XCTAssertEqual(findParts(input), [])
+        XCTAssertEqual(findParts(input), [:])
     }
 
     func test_example_line2() {
@@ -89,7 +89,7 @@ final class Day03Tests: XCTestCase {
         467..114..
         ...*......
         """
-        XCTAssertEqual(findParts(input), [467])
+        XCTAssertEqual(findParts(input), [467: 1])
     }
 
     func test_example_line3() {
@@ -98,7 +98,7 @@ final class Day03Tests: XCTestCase {
         ...*......
         ..35..633.
         """
-        XCTAssertEqual(findParts(input), [467, 35])
+        XCTAssertEqual(findParts(input), [467: 1, 35: 1])
     }
 
     func test_example_line4() {
@@ -108,7 +108,7 @@ final class Day03Tests: XCTestCase {
         ..35..633.
         ......#...
         """
-        XCTAssertEqual(findParts(input), [467, 35, 633])
+        XCTAssertEqual(findParts(input), [467: 1, 35: 1, 633: 1])
     }
 
     func test_example_line5() {
@@ -119,7 +119,7 @@ final class Day03Tests: XCTestCase {
         ......#...
         617*......
         """
-        XCTAssertEqual(findParts(input), [467, 35, 633, 617])
+        XCTAssertEqual(findParts(input), [467: 1, 35: 1, 633: 1, 617: 1])
     }
 
     func test_example_line6ToEnd() {
@@ -135,6 +135,22 @@ final class Day03Tests: XCTestCase {
         ...$.*....
         .664.598..
         """
-        XCTAssertEqual(findParts(input), [467, 35, 633, 617, 592, 755, 664, 598])
+        XCTAssertEqual(findParts(input), [467: 1, 35: 1, 633: 1, 617: 1, 592: 1, 755: 1, 664: 1, 598: 1])
+    }
+
+    func test_edgeCase1() {
+        let input = """
+        467..114..
+        ...*467...
+        ..35..633.
+        ......#...
+        617*......
+        .....+.58.
+        ..592.....
+        ......755.
+        ...$.*....
+        .664.598..
+        """
+        XCTAssertEqual(findParts(input), [467: 2, 35: 1, 633: 1, 617: 1, 592: 1, 755: 1, 664: 1, 598: 1])
     }
 }
