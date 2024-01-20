@@ -78,6 +78,14 @@ func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, endIndex:
     return false
 }
 
+func sumParts(_ parts: [Int: Int]) -> Int {
+    var sum = 0
+    for (key, value) in parts {
+        sum += key * value
+    }
+    return sum
+}
+
 final class Day03Tests: XCTestCase {
     func test_example_line1() {
         let input = "467..114.."
@@ -136,6 +144,7 @@ final class Day03Tests: XCTestCase {
         .664.598..
         """
         XCTAssertEqual(findParts(input), [467: 1, 35: 1, 633: 1, 617: 1, 592: 1, 755: 1, 664: 1, 598: 1])
+        XCTAssertEqual(sumParts(findParts(input)), 4361)
     }
 
     func test_edgeCase1() {
