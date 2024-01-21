@@ -39,4 +39,11 @@ final class Day04PartOneTest: XCTestCase {
         XCTAssertEqual(winningNumbers, [13, 32, 20, 16, 61])
         XCTAssertEqual(numbers, [61, 30, 68, 82, 17, 32, 24, 19])
     }
+
+    func test_examplePartOne_line3() {
+        let input = "Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1"
+        let (winningNumbers, numbers) = parse(input)
+        XCTAssertEqual(winningNumbers, [1, 21, 53, 59, 44])
+        XCTAssertEqual(numbers, [69, 82, 63, 72, 16, 21, 14, 1])
+    }
 }
