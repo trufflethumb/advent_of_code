@@ -29,11 +29,7 @@ public func points(_ winningNumbers: [Int], _ candidates: [Int]) -> Int {
         .intersection(Set(candidates))
         .count
 
-    if numberOfWins == 0 {
-        return 0
-    } else {
-        return 2.toThePower(of: numberOfWins - 1)
-    }
+    return 2.toThePower(of: numberOfWins - 1)
 }
 
 public func sumPoints(_ input: String) -> Int {
@@ -46,7 +42,7 @@ public func sumPoints(_ input: String) -> Int {
 
 public extension Int {
     func toThePower(of exp: Int) -> Int {
-        if exp < 0 { return self }
+        if exp < 0 { return 0 }
         if exp == 0 { return 1 }
         var multiple = 1
         for _ in 0 ..< exp {
