@@ -83,7 +83,7 @@ public func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, en
 
 public func findGearRatios(_ result: ParseResult) -> [Int] {
     var gearRatios = [Int]()
-    outer: for symbol in result.symbols {
+    symbolLoop: for symbol in result.symbols {
         var intersections = 0
         var gearRatio = 1
         for (range, number) in result.numbers {
@@ -93,7 +93,7 @@ public func findGearRatios(_ result: ParseResult) -> [Int] {
             }
             if intersections == 2 {
                 gearRatios.append(gearRatio)
-                continue outer
+                continue symbolLoop
             }
         }
     }
