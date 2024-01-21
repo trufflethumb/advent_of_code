@@ -25,11 +25,7 @@ partOne()
 // Part 2
 func partTwo() {
     let wrongAnswers = [Int: String]()
-    let result = findParts(content).reduce(0) { result, dict in
-        let (key, value) = dict
-        guard value == 2 else { return result }
-        return result + key * value
-    }
+    let result = findSumOfGearRatios(findParts(content))
     let answer: Int? = nil
     if let found = wrongAnswers[result] {
         print("Got one of the wrong results: \(result) is \(found)")

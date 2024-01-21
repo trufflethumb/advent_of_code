@@ -96,7 +96,9 @@ final class Day03Tests: XCTestCase {
     }
 
     private func assertEqual(_ input: String, _ expectation: [Int], file: StaticString = #file, line: UInt = #line) {
-        let result = findParts(input)
+        let result = findParts(input).reduce(into: [Int: Int]()) {
+            $0[$1, default: 0] += 1
+        }
 
         let expectation = expectation.reduce(into: [Int: Int]()) {
             $0[$1, default: 0] += 1

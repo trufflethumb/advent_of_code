@@ -1,6 +1,13 @@
 import Foundation
 
-public func findParts(_ input: String) -> [Int: Int] {
+public struct ParseResult {
+    public let symbols: [Int]
+    public let numbers: [Range<Int>: Int]
+    public let width: Int
+    public let endIndex: Int
+}
+
+public func parse(_ input: String) -> ParseResult {
     let input = Array(input)
     let width = if let lineWidth = input.firstIndex(of: "\n") {
         lineWidth + 1
@@ -29,13 +36,17 @@ public func findParts(_ input: String) -> [Int: Int] {
             }
         }
     }
+    return ParseResult(symbols: symbols, numbers: numbers, width: width, endIndex: input.endIndex)
+}
 
-    var parts = [Int: Int]()
+public func findParts(_ input: String) -> [Int] {
+    let result = parse(input)
+    var parts = [Int]()
 
-    for symbol in symbols {
-        for (range, number) in numbers {
-            if findIntersection(symbolIndex: symbol, range: range, width: width, endIndex: input.endIndex) {
-                parts[number, default: 0] += 1
+    for symbol in result.symbols {
+        for (range, number) in result.numbers {
+            if findIntersection(symbolIndex: symbol, range: range, width: result.width, endIndex: result.endIndex) {
+                parts.append(number)
             }
         }
     }
@@ -70,9 +81,10 @@ public func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, en
     return false
 }
 
-public func findSumOfParts(_ parts: [Int: Int]) -> Int {
-    parts.reduce(0) { result, dict in
-        let (key, value) = dict
-        return result + key * value
-    }
+public func findSumOfParts(_ parts: [Int]) -> Int {
+    parts.reduce(0, +)
+}
+
+public func findSumOfGearRatios(_ parts: [Int]) -> Int {
+    parts.reduce(0, +)
 }
