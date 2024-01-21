@@ -10,7 +10,7 @@ let content = try String(contentsOf: input)
 // Part 1
 func partOne() {
     let wrongAnswers = [424683: "too low"]
-    let result = findParts(content).reduce(0, +)
+    let result = findSumOfParts(findParts(content))
     let answer = 540212
     if let found = wrongAnswers[result] {
         print("Got one of the wrong results: \(result) is \(found)")
@@ -25,7 +25,11 @@ partOne()
 // Part 2
 func partTwo() {
     let wrongAnswers = [Int: String]()
-    let result = findParts(content).reduce(0, +)
+    let result = findParts(content).reduce(0) { result, dict in
+        let (key, value) = dict
+        guard value == 2 else { return result }
+        return result + key * value
+    }
     let answer: Int? = nil
     if let found = wrongAnswers[result] {
         print("Got one of the wrong results: \(result) is \(found)")

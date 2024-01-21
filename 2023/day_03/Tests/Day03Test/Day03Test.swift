@@ -66,7 +66,7 @@ final class Day03Tests: XCTestCase {
         .664.598..
         """
         assertEqual(input, [467, 35, 633, 617, 592, 755, 664, 598])
-        XCTAssertEqual(findParts(input).reduce(0, +), 4361)
+        XCTAssertEqual(findSumOfParts(findParts(input)), 4361)
     }
 
     func test_edgeCase1() {
@@ -96,9 +96,7 @@ final class Day03Tests: XCTestCase {
     }
 
     private func assertEqual(_ input: String, _ expectation: [Int], file: StaticString = #file, line: UInt = #line) {
-        let result = findParts(input).reduce(into: [Int: Int]()) {
-            $0[$1, default: 0] += 1
-        }
+        let result = findParts(input)
 
         let expectation = expectation.reduce(into: [Int: Int]()) {
             $0[$1, default: 0] += 1

@@ -1,6 +1,6 @@
 import Foundation
 
-public func findParts(_ input: String) -> [Int] {
+public func findParts(_ input: String) -> [Int: Int] {
     let input = Array(input)
     let width = if let lineWidth = input.firstIndex(of: "\n") {
         lineWidth + 1
@@ -30,12 +30,12 @@ public func findParts(_ input: String) -> [Int] {
         }
     }
 
-    var parts = [Int]()
+    var parts = [Int: Int]()
 
     for symbol in symbols {
         for (range, number) in numbers {
             if findIntersection(symbolIndex: symbol, range: range, width: width, endIndex: input.endIndex) {
-                parts.append(number)
+                parts[number, default: 0] += 1
             }
         }
     }
@@ -68,4 +68,11 @@ public func findIntersection(symbolIndex: Int, range: Range<Int>, width: Int, en
         }
     }
     return false
+}
+
+public func findSumOfParts(_ parts: [Int: Int]) -> Int {
+    parts.reduce(0) { result, dict in
+        let (key, value) = dict
+        return result + key * value
+    }
 }
