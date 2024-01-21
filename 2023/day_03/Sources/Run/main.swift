@@ -25,13 +25,14 @@ partOne()
 // Part 2
 func partTwo() {
     let wrongAnswers = [Int: String]()
-    let result = findSumOfGearRatios(findParts(content))
-    let answer: Int? = nil
+    let result = findSumOfGearRatios(findGearRatios(parse(content)))
+    let answer = 87605697
     if let found = wrongAnswers[result] {
         print("Got one of the wrong results: \(result) is \(found)")
-    } else if let answer, answer == result {
+    } else if answer == result {
         print("You got it right: \(answer)")
     } else {
         print("New wrong results: \(result)")
     }
 }
+partTwo()
