@@ -91,10 +91,9 @@ public func findGearRatios(_ result: ParseResult) -> [Int] {
                 intersections += 1
                 gearRatio *= number
             }
-            if intersections == 2 {
-                gearRatios.append(gearRatio)
-                continue symbolLoop
-            }
+        }
+        if intersections == 2 {
+            gearRatios.append(gearRatio)
         }
     }
     return gearRatios

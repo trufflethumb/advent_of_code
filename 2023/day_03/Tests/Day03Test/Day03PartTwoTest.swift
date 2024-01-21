@@ -33,4 +33,29 @@ final class Day03PartTwoTest: XCTestCase {
             467835
         )
     }
+
+    func test_partTwoWithThreeAdjacentNumbers_shouldNotCountThreeAdjacent() {
+        let input = """
+        467..114..
+        ...*17....
+        ..35..633.
+        ......#...
+        617*......
+        .....+.58.
+        ..592.....
+        ......755.
+        ...$.*....
+        .664.598..
+        """
+        XCTAssertEqual(
+            findSumOfGearRatios(
+                findGearRatios(
+                    parse(
+                        input
+                    )
+                )
+            ),
+            451490
+        )
+    }
 }

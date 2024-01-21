@@ -20,7 +20,7 @@ func partOne() {
         print("New wrong results: \(result)")
     }
 }
-partOne()
+//partOne()
 
 // Part 2
 func partTwo() {
