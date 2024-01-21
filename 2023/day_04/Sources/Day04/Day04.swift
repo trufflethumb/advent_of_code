@@ -29,7 +29,19 @@ public func points(_ winningNumbers: [Int], _ candidates: [Int]) -> Int {
         .intersection(Set(candidates))
         .count
 
-    return 2.toThePower(of: numberOfWins - 1)
+    if numberOfWins == 0 {
+        return 0
+    } else {
+        return 2.toThePower(of: numberOfWins - 1)
+    }
+}
+
+public func sumPoints(_ input: String) -> Int {
+    input.components(separatedBy: .newlines)
+        .filter { !$0.isEmpty }
+        .map(parse)
+        .map(points)
+        .reduce(0, +)
 }
 
 public extension Int {
