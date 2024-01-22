@@ -18,5 +18,6 @@ final class Day04PartTwoTest: XCTestCase {
             .map(wins)
 
         XCTAssertEqual(scratchCards(points), [1, 2, 4, 8, 14, 1])
+        XCTAssertEqual(sumScratchCardCount(input), 30)
     }
 }

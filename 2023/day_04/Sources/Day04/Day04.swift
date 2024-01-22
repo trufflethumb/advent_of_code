@@ -36,10 +36,22 @@ public func wins(_ winningNumbers: [Int], _ candidates: [Int]) -> Int {
 }
 
 public func sumPoints(_ input: String) -> Int {
-    input.components(separatedBy: .newlines)
+    input
+        .components(separatedBy: .newlines)
         .filter { !$0.isEmpty }
         .map(parse)
         .map(points)
+        .reduce(0, +)
+}
+
+public func sumScratchCardCount(_ input: String) -> Int {
+    let wins = input
+        .components(separatedBy: .newlines)
+        .filter { !$0.isEmpty }
+        .map(parse)
+        .map(wins)
+
+    return scratchCards(wins)
         .reduce(0, +)
 }
 
