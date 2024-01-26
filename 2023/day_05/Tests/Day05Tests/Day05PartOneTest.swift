@@ -37,34 +37,48 @@ func parse(_ input: String) -> Input {
     )
 }
 
+func destination(from source: Int, using map: [[Int]]) -> Int {
+    for row in map {
+        let destStart = row[0]
+        let sourceStart = row[1]
+        let count = row[2]
+        if (sourceStart..<(sourceStart + count)).contains(source) {
+            return destStart - sourceStart + source
+        }
+    }
+    return source
+}
+
 final class Day05PartOneTest: XCTestCase {
+    func test_seedToSoil_seedOne() {
+        let input = parse(input)
+        let seed = input.seeds[0]
+        let sut = destination(from: seed, using: input.maps[0])
+        XCTAssertEqual(sut, 81)
+    }
+
+    func test_seedToSoil_seedTwo() {
+        let input = parse(input)
+        let seed = input.seeds[1]
+        let sut = destination(from: seed, using: input.maps[0])
+        XCTAssertEqual(sut, 14)
+    }
+
+    func test_seedToSoil_seedThree() {
+        let input = parse(input)
+        let seed = input.seeds[2]
+        let sut = destination(from: seed, using: input.maps[0])
+        XCTAssertEqual(sut, 57)
+    }
+
+    func test_seedToSoil_seedFour() {
+        let input = parse(input)
+        let seed = input.seeds[3]
+        let sut = destination(from: seed, using: input.maps[0])
+        XCTAssertEqual(sut, 13)
+    }
+
     func test_examplePartOne() {
-        let input = """
-        seeds: 79 14 55 13
-
-        seed-to-soil map:
-        50 98 2
-        52 50 48
-        
-        fertilizer-to-water map:
-        49 53 8
-        0 11 42
-        42 0 7
-        57 7 4
-
-        water-to-light map:
-        88 18 7
-        18 25 70
-
-        light-to-temperature map:
-        45 77 23
-        81 45 19
-        68 64 13
-
-        temperature-to-humidity map:
-        0 69 1
-        1 0 69
-        """
         let sut = parse(input)
         XCTAssertEqual(sut.seeds, [79, 14, 55, 13])
         XCTAssertEqual(sut.maps, [
@@ -136,5 +150,34 @@ final class Day05PartOneTest: XCTestCase {
             [[0, 69, 1],
              [1, 0, 70],]
         ])
+    }
+
+    var input: String {
+        """
+        seeds: 79 14 55 13
+
+        seed-to-soil map:
+        50 98 2
+        52 50 48
+
+        fertilizer-to-water map:
+        49 53 8
+        0 11 42
+        42 0 7
+        57 7 4
+
+        water-to-light map:
+        88 18 7
+        18 25 70
+
+        light-to-temperature map:
+        45 77 23
+        81 45 19
+        68 64 13
+
+        temperature-to-humidity map:
+        0 69 1
+        1 0 69
+        """
     }
 }
