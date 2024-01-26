@@ -7,6 +7,8 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 
 let content = try String(contentsOf: input)
 
-// Part 1
+// Part 1, answer = 379811651
+let parsedInput = parse(content)
+print(minLocation(parsedInput))
 
 // Part 2
