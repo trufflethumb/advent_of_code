@@ -98,7 +98,10 @@ final class Day05PartOneTest: XCTestCase {
          [68, 64, 13],],
 
         [[0, 69, 1],
-         [1, 0, 69],]
+         [1, 0, 69],],
+
+        [[60, 56, 37],
+         [56, 93, 4],]
         ])
     }
 
@@ -128,6 +131,10 @@ final class Day05PartOneTest: XCTestCase {
         temperature-to-humidity map:
         0 69 1
         1 0 70
+
+        humidity-to-location map:
+        60 56 37
+        56 93 5
         """
         let sut = parse(input)
         XCTAssertEqual(sut.seeds, [79, 14, 55, 15])
@@ -148,7 +155,10 @@ final class Day05PartOneTest: XCTestCase {
              [68, 64, 13],],
 
             [[0, 69, 1],
-             [1, 0, 70],]
+             [1, 0, 70],],
+
+            [[60, 56, 37],
+             [56, 93, 5],]
         ])
     }
 
@@ -178,6 +188,10 @@ final class Day05PartOneTest: XCTestCase {
         temperature-to-humidity map:
         0 69 1
         1 0 69
+
+        humidity-to-location map:
+        60 56 37
+        56 93 4
         """
     }
 }
