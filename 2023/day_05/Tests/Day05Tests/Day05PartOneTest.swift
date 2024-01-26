@@ -56,6 +56,7 @@ final class Day05PartOneTest: XCTestCase {
             [[45, 77, 23], [81, 45, 19], [68, 64, 13]],
             [[0, 69, 1], [1, 0, 69]],
             [[60, 56, 37], [56, 93, 4]]])
+        XCTAssertEqual(minLocation(sut), 35)
     }
 
     func test_examplePartOne_differentInput() {

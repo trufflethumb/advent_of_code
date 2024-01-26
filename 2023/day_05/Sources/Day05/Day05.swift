@@ -58,3 +58,10 @@ public func numbers(fromSeed seed: Int, using maps: [[[Int]]]) -> [Int] {
     return result
 }
 
+public func minLocation(_ input: Input) -> Int {
+    let maps = input.maps
+    return input.seeds.map { seed in
+        numbers(fromSeed: seed, using: maps).last!
+    }
+    .min()!
+}
