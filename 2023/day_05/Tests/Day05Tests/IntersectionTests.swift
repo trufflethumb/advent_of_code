@@ -53,7 +53,7 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
 }
 
 final class IntersectionTests: XCTestCase {
-    func test1() {
+    func test_contained_1() {
         let initial: [Operation] = [[Int.min, Int.max, 0]]
         let sut = intersect(initial, [98, 100, -48])
         XCTAssertEqual(sut, [
@@ -62,7 +62,7 @@ final class IntersectionTests: XCTestCase {
             [100, Int.max, 0]])
     }
 
-    func test2() {
+    func test_contained_2() {
         let initial: [Operation] = [[Int.min, Int.max, 0]]
         let sut = intersect(initial, [97, 100, -48])
         XCTAssertEqual(sut, [
@@ -71,7 +71,7 @@ final class IntersectionTests: XCTestCase {
             [100, Int.max, 0]])
     }
 
-    func test3() {
+    func test_leftIntersect() {
         let initial: [Operation] = [
             [Int.min, 200, 1],
         ]
