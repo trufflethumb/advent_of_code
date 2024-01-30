@@ -46,12 +46,12 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         // existing:    ----
         // new:      ----------
         let antiContained = left > newLeft && right < newRight
-        // existing: -------
+        // existing: -------???
         // new:         -------
         let leftIntersect = left < newLeft && right <= newRight
-        // existing:    -------
+        // existing: ???-------
         // new:      -------
-        let rightIntersect = left > newLeft && right > newRight
+        let rightIntersect = left >= newLeft && right > newRight
         // existing:     ------
         // new:      ---    
         let leftMiss = left > newRight
@@ -75,7 +75,7 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
             result.append([right, newRight, newOp])
         } else
 
-        // existing: -------
+        // existing: -------???
         // new:         -------
         if leftIntersect {
             result.append([left, newLeft, initalOp])
@@ -85,8 +85,16 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
             if right < newRight {
                 result.append([right, newRight, newOp])
             }
-        } else if rightIntersect {
-            result.append([newLeft, left, newOp])
+        } else
+
+        // existing: ???-------
+        // new:      -------
+        if rightIntersect {
+            // existing: ----------
+            // new:      -------
+            if left > newLeft {
+                result.append([newLeft, left, newOp])
+            }
             result.append([left, newRight, combined])
             result.append([newRight, right, initalOp])
         }
@@ -186,6 +194,17 @@ final class IntersectionTests: XCTestCase {
         assert(sut, [
             [Int.min, 100, 1],
             [100, 200, 3],
+        ])
+    }
+
+    func test_rightIntersectIdenticalLeftBound() {
+        let initial: [Operation] = [
+            [100, Int.max, 2]
+        ]
+        let sut = intersect(initial, [100, 200, 1])
+        assert(sut, [
+            [100, 200, 3],
+            [200, Int.max, 2],
         ])
     }
 
