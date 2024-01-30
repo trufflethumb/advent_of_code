@@ -37,6 +37,9 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         let newOp = new.operation
         let combined = initalOp + newOp
 
+        // existing:    ----   
+        // new:         ----
+        let identical = left == newLeft && right == newRight
         // existing: ----------
         // new:         ----
         let contained = left < newLeft && right > newRight
@@ -50,7 +53,9 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         // new:      -------
         let rightIntersect = left > newLeft && right > newRight
 
-        if contained {
+        if identical {
+            result.append([left, right, combined])
+        } else if contained {
             result.append([left, newLeft, initalOp])
             result.append([newLeft, newRight, newOp])
             result.append([newRight, right, initalOp])
@@ -120,6 +125,16 @@ final class IntersectionTests: XCTestCase {
             [Int.min, 100, 1],
             [100, 200, 3],
             [200, Int.max, 2],
+        ])
+    }
+
+    func test_identical() {
+        let initial: [Operation] = [
+            [100, Int.max, 2]
+        ]
+        let sut = intersect(initial, [100, Int.max, 1])
+        assert(sut, [
+            [100, Int.max, 3],
         ])
     }
 
