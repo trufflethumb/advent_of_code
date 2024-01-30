@@ -40,6 +40,9 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         // existing: ----------
         // new:         ----
         let contained = left < newLeft && right > newRight
+        // existing:    ----
+        // new:      ----------
+        let antiContained = left > newLeft && right < newRight
         // existing: -------
         // new:         -------
         let leftIntersect = left < newLeft && right < newRight
@@ -51,6 +54,10 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
             result.append([left, newLeft, initalOp])
             result.append([newLeft, newRight, newOp])
             result.append([newRight, right, initalOp])
+        } else if antiContained {
+            result.append([newLeft, left, newOp])
+            result.append([left, right, combined])
+            result.append([right, newRight, newOp])
         } else if leftIntersect {
             result.append([left, newLeft, initalOp])
             result.append([newLeft, right, combined])
@@ -81,6 +88,15 @@ final class IntersectionTests: XCTestCase {
             [Int.min, 97, 0],
             [97, 100, -48],
             [100, Int.max, 0]])
+    }
+
+    func test_antiContained() {
+        let initial: [Operation] = [[97, 100, 1]]
+        let sut = intersect(initial, [Int.min, Int.max, 2])
+        XCTAssertEqual(sut, [
+            [Int.min, 97, 2],
+            [97, 100, 3],
+            [100, Int.max, 2]])
     }
 
     func test_leftIntersect() {
