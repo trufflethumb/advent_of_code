@@ -48,7 +48,7 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         let antiContained = left > newLeft && right < newRight
         // existing: -------
         // new:         -------
-        let leftIntersect = left < newLeft && right < newRight
+        let leftIntersect = left < newLeft && right <= newRight
         // existing:    -------
         // new:      -------
         let rightIntersect = left > newLeft && right > newRight
@@ -73,10 +73,18 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
             result.append([newLeft, left, newOp])
             result.append([left, right, combined])
             result.append([right, newRight, newOp])
-        } else if leftIntersect {
+        } else
+
+        // existing: -------
+        // new:         -------
+        if leftIntersect {
             result.append([left, newLeft, initalOp])
             result.append([newLeft, right, combined])
-            result.append([right, newRight, newOp])
+            // existing: ----------
+            // new:          ------
+            if right < newRight {
+                result.append([right, newRight, newOp])
+            }
         } else if rightIntersect {
             result.append([newLeft, left, newOp])
             result.append([left, newRight, combined])
@@ -167,6 +175,17 @@ final class IntersectionTests: XCTestCase {
         assert(sut, [
             [Int.min, 99, 1],
             [100, Int.max, 2],
+        ])
+    }
+
+    func test_leftIntersectIdenticalRightBound() {
+        let initial: [Operation] = [
+            [Int.min, 200, 1],
+        ]
+        let sut = intersect(initial, [100, 200, 2])
+        assert(sut, [
+            [Int.min, 100, 1],
+            [100, 200, 3],
         ])
     }
 
