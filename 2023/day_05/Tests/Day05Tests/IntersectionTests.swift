@@ -55,9 +55,14 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         // existing:     ------
         // new:      ---    
         let leftMiss = left > newRight
+        // existing: ---
+        // new:          ------
+        let rightMiss = right < newLeft
 
         if leftMiss {
             return [new, op]
+        } else if rightMiss {
+            return [op, new]
         } else if identical {
             result.append([left, right, combined])
         } else if contained {
@@ -148,6 +153,17 @@ final class IntersectionTests: XCTestCase {
             [100, Int.max, 2]
         ]
         let sut = intersect(initial, [Int.min, 99, 1])
+        assert(sut, [
+            [Int.min, 99, 1],
+            [100, Int.max, 2],
+        ])
+    }
+
+    func test_rightMiss() {
+        let initial: [Operation] = [
+            [Int.min, 99, 1]
+        ]
+        let sut = intersect(initial, [100, Int.max, 2])
         assert(sut, [
             [Int.min, 99, 1],
             [100, Int.max, 2],
