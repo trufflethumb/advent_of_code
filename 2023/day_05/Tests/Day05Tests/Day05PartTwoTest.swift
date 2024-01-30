@@ -24,4 +24,54 @@ final class Day05PartTwoTest: XCTestCase {
         let sut = minLocation(rangesOfSeedInput: input)
         XCTAssertEqual(sut, 46)
     }
+    
+    func test_examplePartTwo() {
+        let input = parse(input)
+        let label = ["soil", "fertilizer", "water", "light", "temperature", "humidity", "location"]
+        zip(label, input.maps).forEach { label, map in
+            print(label)
+            for row in map {
+                let destStart = row[0]
+                let sourceStart = row[1]
+                let count = row[2]
+                let diff = destStart - sourceStart
+                let lhs = sourceStart
+                let rhs = sourceStart + count
+                let trans = "\(lhs)-\(rhs): \(diff)"
+                let resultLHS = lhs + diff
+                let resultRHS = rhs + diff
+                let result = "\(resultLHS) - \(resultRHS)"
+                print(trans + " = " + result)
+            }
+            print("--\n")
+        }
+    }
+
+    func test_splitRange() {
+        let input = parse(input)
+        let label = ["soil", "fertilizer", "water", "light", "temperature", "humidity", "location"]
+        zip(label, input.maps).forEach { label, map in
+            print(label)
+            for row in map {
+                let destStart = row[0]
+                let sourceStart = row[1]
+                let count = row[2]
+                let diff = destStart - sourceStart
+                let lhs = sourceStart
+                let rhs = sourceStart + count
+                let trans = "\(lhs)-\(rhs): \(diff)"
+                print(trans)
+                //
+                //
+                //
+                //                let resultLHS = lhs + diff
+                //                let resultRHS = rhs + diff
+                //
+                //                processed.append(resultLHS..<resultRHS)
+                //                let result = "\(resultLHS) - \(resultRHS)"
+                //                print(trans + " = " + result)
+            }
+            print("--\n")
+        }
+    }
 }
