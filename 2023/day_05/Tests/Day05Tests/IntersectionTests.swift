@@ -12,6 +12,12 @@ struct Operation: Equatable {
     let operation: Int
 }
 
+extension Operation: Comparable {
+    static func < (lhs: Operation, rhs: Operation) -> Bool {
+        lhs.lower < rhs.lower
+    }
+}
+
 extension Operation: ExpressibleByArrayLiteral {
     init(arrayLiteral elements: Int...) {
         lower = elements[0]
@@ -34,10 +40,12 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
         // existing: ----------
         // new:         ----
         let contained = left < newLeft && right > newRight
-        
-        // existing: -------   
+        // existing: -------
         // new:         -------
         let leftIntersect = left < newLeft && right < newRight
+        // existing:    -------
+        // new:      -------
+        let rightIntersect = left > newLeft && right > newRight
 
         if contained {
             result.append([left, newLeft, initalOp])
@@ -47,6 +55,10 @@ func intersect(_ initial: [Operation], _ new: Operation) -> [Operation] {
             result.append([left, newLeft, initalOp])
             result.append([newLeft, right, combined])
             result.append([right, newRight, newOp])
+        } else if rightIntersect {
+            result.append([newLeft, left, newOp])
+            result.append([left, newRight, combined])
+            result.append([newRight, right, initalOp])
         }
     }
     return result
@@ -83,7 +95,21 @@ final class IntersectionTests: XCTestCase {
         ])
     }
 
+    func test_rightIntersect() {
+        let initial: [Operation] = [
+            [100, Int.max, 2]
+        ]
+        let sut = intersect(initial, [Int.min, 200, 1])
+        assert(sut, [
+            [Int.min, 100, 1],
+            [100, 200, 3],
+            [200, Int.max, 2],
+        ])
+    }
+
     private func assert(_ sut: [Operation], _ expected: [Operation], file: StaticString = #file, line: UInt = #line) {
+        let expected = expected.sorted()
+        let sut = sut.sorted()
         for (index, exp) in expected.enumerated() {
             XCTAssertEqual(sut[index].lower, exp.lower, "Lowerbound for index \(index): \(sut[index].lower) != \(exp.lower)", file: file, line: line)
             XCTAssertEqual(sut[index].upper, exp.upper, "Upperbound for index \(index): \(sut[index].upper) != \(exp.upper)", file: file, line: line)
