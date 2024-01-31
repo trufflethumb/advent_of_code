@@ -9,7 +9,9 @@ let content = try String(contentsOf: input)
 
 // Part 1
 let parsedInput = parse(content)
-let answer = zip(parsedInput.times.map(allDistances(timeLimit:)), parsedInput.distances)
+let times = parsedInput.times.map(allDistances(timeLimit:))
+let distances = parsedInput.distances
+let answer = zip(times, distances)
     .map(waysToWin)
     .reduce(1, *)
 print(answer)
