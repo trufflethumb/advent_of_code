@@ -8,5 +8,11 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 let content = try String(contentsOf: input)
 
 // Part 1
+let parsedInput = parse(content)
+let answer = zip(parsedInput.times.map(allDistances(timeLimit:)), parsedInput.distances)
+    .map(waysToWin)
+    .reduce(1, *)
+print(answer)
+
 
 // Part 2
