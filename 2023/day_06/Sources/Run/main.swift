@@ -7,14 +7,16 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 
 let content = try String(contentsOf: input)
 
-// Part 1
-let parsedInput = parse(content)
-let times = parsedInput.times.map(allDistances(timeLimit:))
-let distances = parsedInput.distances
-let answer = zip(times, distances)
-    .map(waysToWin)
-    .reduce(1, *)
-print(answer)
+func getAnswer(parser: (String) -> Input) {
+    let parsedInput = parser(content)
+    let answer = zip(parsedInput.times, parsedInput.distances)
+        .map(waysToWin)
+        .reduce(1, *)
+    print(answer)
+}
 
+// Part 1, answer = 74698
+getAnswer(parser: parse)
 
 // Part 2
+//getAnswer(parser: parseSingleRace)

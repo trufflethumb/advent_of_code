@@ -17,24 +17,36 @@ public func parse(_ input: String) -> Input {
     return Input(times: times, distances: distances)
 }
 
-public func allDistances(timeLimit: Int) -> [Int] {
-    var distances = [Int](repeating: 0, count: (timeLimit + 1) / 2)
+public func waysToWin(timeLimit: Int, record: Int) -> Int {
+    var minWin = 0
+
     for accelerationDuration in 0 ..< (timeLimit + 1) / 2 {
         let speed = accelerationDuration
         let timeRemaining = timeLimit - accelerationDuration
-        distances[accelerationDuration] = timeRemaining * speed
+        let distance = timeRemaining * speed
+        if distance > record {
+            minWin = accelerationDuration
+            break
+        }
     }
-    return distances
+
+    let symmetricCount = ((timeLimit + 1) / 2 - minWin) * 2
+
+    // We add one when timeLimit is even because
+    // the number of trials is equal to the timeLimit
+    // plus one. This is because we also count the one
+    // when t = timeLimit. This results in an odd number
+    // of trials for an even timeLimit.
+    if timeLimit.isMultiple(of: 2) {
+        return symmetricCount + 1
+    } else {
+        return symmetricCount
+    }
 }
 
-public func waysToWin(_ distances: [Int], record: Int) -> Int {
-    let count = distances
-        .filter { $0 > record }
-        .count
-
-    if distances.count.isMultiple(of: 2) {
-        return count * 2
-    } else {
-        return count * 2 + 1
-    }
+public func parseSingleRace(_ input: String) -> Input {
+    let components = input.components(separatedBy: .newlines)
+    let times = components[0].replacingOccurrences(of: " ", with: "").components(separatedBy: ":").compactMap(Int.init)
+    let distances = components[1].replacingOccurrences(of: " ", with: "").components(separatedBy: ":").compactMap(Int.init)
+    return Input(times: times, distances: distances)
 }
