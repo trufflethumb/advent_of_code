@@ -14,12 +14,12 @@ final class Day07PartOneTest: XCTestCase {
         XCTAssertEqual(sut.rows[1].bid, 684)
     }
 
-    func test_examplePartOne_line1_rank() {
+    func test_examplePartOne_line1_strength() {
         let sut = parsePartOne(example)
         XCTAssertEqual(sut.rows[0].hand.strength(), .onePair)
     }
 
-    func test_examplePartOne_line2_rank() {
+    func test_examplePartOne_line2_strength() {
         let sut = parsePartOne(example)
         XCTAssertEqual(sut.rows[1].hand.strength(), .three)
     }

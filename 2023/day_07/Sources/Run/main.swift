@@ -21,3 +21,6 @@ func partOne() {
 }
 
 // Part 2
+func partTwo() {
+
+}
