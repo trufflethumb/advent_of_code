@@ -16,7 +16,7 @@ func getAnswer(parser: (String) -> Input) {
 }
 
 // Part 1, answer = 74698
-getAnswer(parser: parse)
+//getAnswer(parser: parse)
 
 // Part 2
-//getAnswer(parser: parseSingleRace)
+getAnswer(parser: parseSingleRace)
