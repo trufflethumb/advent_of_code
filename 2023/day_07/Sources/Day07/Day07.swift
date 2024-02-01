@@ -44,7 +44,11 @@ public struct Hand: ExpressibleByArrayLiteral, Equatable {
         cards = elements
     }
 
-    init(_ cards: [Int]) {
+    public init(_ string: String) {
+        self.init(string.map(String.init).map(Int.init))
+    }
+
+    public init(_ cards: [Int]) {
         self.cards = cards
     }
 
@@ -56,8 +60,13 @@ public struct Hand: ExpressibleByArrayLiteral, Equatable {
         }
 
         var dict = cards.reduce(into: [Int: Int]()) { current, next in
+            // we don't want J's to ruin other cards
+            if countWildCards && next == "J" { return }
             current[next, default: 0] += 1
         }
+
+        // this only happens when we have 5 J's
+        if dict.isEmpty { return .five }
 
         let maxRepeatedCard = dict.max { lhs, rhs in
             let (_, valueL) = lhs
@@ -161,8 +170,7 @@ public func parsePartOne(_ input: String) -> PartOneInput {
         .filter { !$0.isEmpty }
         .map { line in
             let parts = line.components(separatedBy: .whitespaces)
-            let cards = parts[0].map(String.init).map(Int.init)
-            let hand = Hand(cards)
+            let hand = Hand(parts[0])
             let bid = Int(parts[1])!
             return (hand, bid)
         }
