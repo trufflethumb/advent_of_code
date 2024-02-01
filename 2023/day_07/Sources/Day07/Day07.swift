@@ -65,14 +65,15 @@ public struct Hand: ExpressibleByArrayLiteral, Equatable {
             current[next, default: 0] += 1
         }
 
-        // this only happens when we have 5 J's
-        if dict.isEmpty { return .five }
-
         let maxRepeatedCard = dict.max { lhs, rhs in
             let (_, valueL) = lhs
             let (_, valueR) = rhs
             return valueL < valueR
-        }!
+        }
+
+        // The only case where we don't have a max is when
+        // the dict is empty
+        guard let maxRepeatedCard else { return .five }
 
         dict[maxRepeatedCard.key] = maxRepeatedCard.value + wildCards
 

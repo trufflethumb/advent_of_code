@@ -20,8 +20,7 @@ func partOne() {
     print(answer)
 }
 
-// Part 2
-
+// Part 2 = 253718286
 func partTwo() {
     let wrongAnswers = [
         254424055: "too high",
