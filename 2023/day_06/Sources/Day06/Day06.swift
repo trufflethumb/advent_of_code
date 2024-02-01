@@ -36,8 +36,6 @@ public func accelerationDuration(timeLimit: Int, record: Int) -> Int {
         if previousJumpSize == jumpSize {
             accDuration += 1
             break
-        } else if distance == record {
-            break
         } else if distance > record {
             accDuration -= jumpSize
         } else {
