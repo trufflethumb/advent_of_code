@@ -25,6 +25,13 @@ extension Int: ExpressibleByStringLiteral {
             fatalError("Invalid input")
         }
     }
+
+    func comparisonValue(wildCards: Bool) -> Int {
+        if wildCards && self == "J" {
+            return 1
+        }
+        return self
+    }
 }
 
 public struct Hand: ExpressibleByArrayLiteral, Equatable {
@@ -42,60 +49,46 @@ public struct Hand: ExpressibleByArrayLiteral, Equatable {
     }
 
     public func strength(countWildCards: Bool = false) -> Strength {
-        let dict = cards.reduce(into: [Int: Int]()) { current, next in
+        let wildCards = if countWildCards {
+            cards.filter { $0 == "J" }.count
+        } else {
+            0
+        }
+
+        var dict = cards.reduce(into: [Int: Int]()) { current, next in
             current[next, default: 0] += 1
         }
+
+        let maxRepeatedCard = dict.max { lhs, rhs in
+            let (_, valueL) = lhs
+            let (_, valueR) = rhs
+            return valueL < valueR
+        }!
+
+        dict[maxRepeatedCard.key] = maxRepeatedCard.value + wildCards
+
         var pairs = 0
         var threeOfAKinds = 0
-        var wildCards = 0
+        var fourOfAKinds = 0
 
-        for (key, value) in dict {
-            if countWildCards && key == "J" {
-                wildCards = value
-                continue
-            }
+        for value in dict.values {
             switch value {
             case 2:
                 pairs += 1
             case 3:
                 threeOfAKinds += 1
             case 4:
-                return .four
-            case 5:
+                fourOfAKinds += 1
+            case 5, 6:
                 return .five
             default:
                 continue
             }
         }
 
-        switch wildCards {
-        case 5, 4:
-            return .five
-        case 3:
-            if pairs == 1 {
-                return .five
-            }
+        if fourOfAKinds == 1 {
             return .four
-        case 2:
-            if pairs == 1 {
-                return .four
-            } else if threeOfAKinds == 1 {
-                return .five
-            }
-            return .three
-        case 1:
-            if pairs == 2 {
-                return .fullHouse
-            } else if pairs == 1 {
-                return .three
-            } else if threeOfAKinds == 1 {
-                return .four
-            }
-        default:
-            break
-        }
-
-        if pairs == 1 && threeOfAKinds == 1 {
+        } else if pairs == 1 && threeOfAKinds == 1 {
             return .fullHouse
         } else if threeOfAKinds == 1 {
             return .three
@@ -111,24 +104,26 @@ public struct Hand: ExpressibleByArrayLiteral, Equatable {
 
 extension Hand: Comparable {
 
-    private static func compare(lhs: Hand, rhs: Hand, getter: (Hand) -> Strength) -> Bool {
-        if getter(lhs).rawValue == getter(rhs).rawValue {
+    private static func compare(lhs: Hand, rhs: Hand, wildCards: Bool) -> Bool {
+        let lhsStrength = lhs.strength(countWildCards: wildCards).rawValue
+        let rhsStrength = rhs.strength(countWildCards: wildCards).rawValue
+        if lhsStrength == rhsStrength {
             var i = 0
-            while lhs.cards[i] == rhs.cards[i] && i < 5 {
+            while lhs.cards[i].comparisonValue(wildCards: wildCards) == rhs.cards[i].comparisonValue(wildCards: wildCards) && i < 5 {
                 i += 1
             }
-            return lhs.cards[i] < rhs.cards[i]
+            return lhs.cards[i].comparisonValue(wildCards: wildCards) < rhs.cards[i].comparisonValue(wildCards: wildCards)
         } else {
-            return getter(lhs).rawValue < getter(rhs).rawValue
+            return lhsStrength < rhsStrength
         }
     }
 
     public static func < (lhs: Hand, rhs: Hand) -> Bool {
-        compare(lhs: lhs, rhs: rhs, getter: { $0.strength() })
+        compare(lhs: lhs, rhs: rhs, wildCards: false)
     }
 
     public static func wildCardLessThan(lhs: Hand, rhs: Hand) -> Bool {
-        compare(lhs: lhs, rhs: rhs, getter: { $0.strength(countWildCards: true) })
+        compare(lhs: lhs, rhs: rhs, wildCards: true)
     }
 }
 
@@ -149,6 +144,10 @@ public struct Row: Comparable {
 
     public static func < (lhs: Row, rhs: Row) -> Bool {
         lhs.hand < rhs.hand
+    }
+
+    public static func wildCardLessThan(lhs: Row, rhs: Row) -> Bool {
+        Hand.wildCardLessThan(lhs: lhs.hand, rhs: rhs.hand)
     }
 }
 

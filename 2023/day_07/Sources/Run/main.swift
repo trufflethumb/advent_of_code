@@ -7,7 +7,7 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 
 let content = try String(contentsOf: input)
 
-// Part 1
+// Part 1 = 255048101
 func partOne() {
     let parsedInput = parsePartOne(content)
     let answer = parsedInput.rows
@@ -21,6 +21,26 @@ func partOne() {
 }
 
 // Part 2
-func partTwo() {
 
+func partTwo() {
+    let wrongAnswers = [
+        254424055: "too high",
+        253698848: "too low",
+        251224936: "too low"
+    ]
+    let parsedInput = parsePartOne(content)
+    let answer = parsedInput.rows
+        .sorted(by: Row.wildCardLessThan)
+        .enumerated()
+        .reduce(0) { current, enumeration in
+            let (index, row) = enumeration
+            return current + (index + 1) * row.bid
+        }
+    if let existing = wrongAnswers[answer] {
+        print(existing)
+    } else {
+        print(answer)
+    }
 }
+
+partTwo()
