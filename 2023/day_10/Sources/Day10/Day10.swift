@@ -7,20 +7,28 @@ public struct PartOneInput {
     public var startingDirections: [Direction] {
         var directions = [Direction]()
         // left
-        if let c = char(at: startingPosition.left), c == .dash {
-            directions.append(.left)
+        if let c = char(at: startingPosition.left) {
+            if [.dash, .l, .f].contains(c)  {
+                directions.append(.left)
+            }
         }
         // right
-        if let c = char(at: startingPosition.right), c == .dash {
-            directions.append(.right)
+        if let c = char(at: startingPosition.right) {
+            if [.dash, .j, .seven].contains(c) {
+                directions.append(.right)
+            }
         }
         // up
-        if let c = char(at: startingPosition.up), c == .pipe {
-            directions.append(.up)
+        if let c = char(at: startingPosition.up) {
+            if [.pipe, .seven, .f].contains(c) {
+                directions.append(.up)
+            }
         }
         // down
-        if let c = char(at: startingPosition.down), c == .pipe {
-            directions.append(.down)
+        if let c = char(at: startingPosition.down) {
+            if [.pipe, .j, .l].contains(c) {
+                directions.append(.down)
+            }
         }
         return directions
     }
