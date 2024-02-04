@@ -7,12 +7,20 @@ guard let input = Bundle.module.url(forResource: "input", withExtension: "txt") 
 
 let content = try String(contentsOf: input)
 
-// Part 1
+// Part 1 = 7145
 func partOne() {
     let input = parsePartOne(content)
     var steps = 0
-    var currentDirection = input.startingDirections[0]
-    var currentCoordinate = input.startingPosition.go(currentDirection)
+    var currentCoordinate = input.startingPosition
+    var currentDirection = [Direction.up, .down, .left, .right]
+        .compactMap { direction in
+            if nil != input.next(at: currentCoordinate.go(direction), currentDirection: direction) {
+                return direction
+            }
+            return nil
+        }
+        .first!
+    currentCoordinate = currentCoordinate.go(currentDirection)
     while let next = input.next(at: currentCoordinate, currentDirection: currentDirection) {
         steps += 1
         currentDirection = next
