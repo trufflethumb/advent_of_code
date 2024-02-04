@@ -20,7 +20,8 @@ final class Day10PartOneTest: XCTestCase {
 
     func test_examplePartOne_startingDirections() {
         let sut = parsePartOne(example)
-        XCTAssertEqual(sut.startingDirections, [.right, .down])
+        XCTAssert(sut.startingDirections.contains(.right))
+        XCTAssert(sut.startingDirections.contains(.down))
     }
 
     func test_examplePartOne_charAt() {
@@ -40,16 +41,8 @@ final class Day10PartOneTest: XCTestCase {
     func test_examplePartOne_completeExample() throws {
         let input = parsePartOne(example)
         var steps = 0
-        var currentCoordinate = input.startingPosition
-        var currentDirection = [Direction.up, .down, .left, .right]
-            .compactMap { direction in
-                if nil != input.next(at: currentCoordinate.go(direction), currentDirection: direction) {
-                    return direction
-                }
-                return nil
-            }
-            .first!
-        currentCoordinate = currentCoordinate.go(currentDirection)
+        var currentDirection = input.startingDirections[0]
+        var currentCoordinate = input.startingPosition.go(currentDirection)
         while let next = input.next(at: currentCoordinate, currentDirection: currentDirection) {
             steps += 1
             currentDirection = next

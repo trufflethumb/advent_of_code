@@ -5,32 +5,13 @@ public struct PartOneInput {
     public let map: [[MapElement]]
 
     public var startingDirections: [Direction] {
-        var directions = [Direction]()
-        // left
-        if let c = char(at: startingPosition.left) {
-            if [.dash, .l, .f].contains(c)  {
-                directions.append(.left)
+        [Direction.up, .down, .left, .right]
+            .compactMap { direction in
+                if nil != next(at: startingPosition.go(direction), currentDirection: direction) {
+                    return direction
+                }
+                return nil
             }
-        }
-        // right
-        if let c = char(at: startingPosition.right) {
-            if [.dash, .j, .seven].contains(c) {
-                directions.append(.right)
-            }
-        }
-        // up
-        if let c = char(at: startingPosition.up) {
-            if [.pipe, .seven, .f].contains(c) {
-                directions.append(.up)
-            }
-        }
-        // down
-        if let c = char(at: startingPosition.down) {
-            if [.pipe, .j, .l].contains(c) {
-                directions.append(.down)
-            }
-        }
-        return directions
     }
 
     public func char(at coord: Coordinate) -> MapElement? {
