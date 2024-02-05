@@ -101,6 +101,8 @@ public struct Coordinate: Equatable, ExpressibleByArrayLiteral {
     }
 }
 
+extension Coordinate: Hashable {}
+
 public extension Array where Element == MapElement {
     var string: String {
         String(map(\.rawValue))
@@ -130,4 +132,18 @@ public func parsePartOne(_ input: String) -> PartOneInput {
     }
 
     return PartOneInput(startingPosition: startingPosition, map: array)
+}
+
+public func boundary(_ input: PartOneInput) -> Set<Coordinate> {
+    var currentDirection = input.startingDirections[0]
+    var currentCoordinate = input.startingPosition.go(currentDirection)
+    var coordinates: Set<Coordinate> = [currentCoordinate]
+    
+    while let next = input.next(at: currentCoordinate, currentDirection: currentDirection) {
+        currentDirection = next
+        currentCoordinate = currentCoordinate.go(next)
+        coordinates.insert(currentCoordinate)
+    }
+
+    return coordinates
 }
