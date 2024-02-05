@@ -106,7 +106,23 @@ public struct PartOneInput {
         }
     }
 
-    public func trimedMap() -> [ArraySlice<MapElement>] {
+    public func cleanedMap() -> [[MapElement]] {
+        let boundary = boundary()
+        var copy = map
+        for x in 0 ..< map.count {
+            for y in 0 ..< map[0].count {
+                if !boundary.contains([x, y]) {
+                    copy[x][y] = .dot
+                }
+                if map[x][y] == .start {
+                    copy[x][y] = startingPositionReplacement()
+                }
+            }
+        }
+        return copy
+    }
+
+    public func trimMap(_ map: [[MapElement]]) -> [ArraySlice<MapElement>] {
         map.map(trimRow)
     }
 
@@ -131,38 +147,39 @@ public struct PartOneInput {
 
     public func enclosedTiles() -> Int {
         var count = 0
-        let boundaryTiles = boundary()
-        let trimmedMap = trimedMap()
-        for (x, row) in trimmedMap.enumerated() {
+        let cleanedMap = cleanedMap()
+        let trimmedMap = trimMap(cleanedMap)
+        for row in trimmedMap {
             var boundaryOdd = false
-            var boundaryFound = false
             var previousTurn: MapElement?
-            for (y, element) in zip(row.indices, row) {
-                let element = element == .start ? startingPositionReplacement() : element
-                let isBoundary = boundaryTiles.contains([x, y])
+            for element in row {
                 let isInside = boundaryOdd
-                && boundaryFound
-                if element == .dot {
-                    if isInside {
-                        count += 1
-                    }
-                } else if let foundPreviousTurn = previousTurn {
+                if let foundPreviousTurn = previousTurn {
                     var shouldToggle = false
+                    var shouldRemove = false
                     switch foundPreviousTurn {
                     case .l:
                         shouldToggle = element == .seven
+                        shouldRemove = element == .l
                     case .f:
                         shouldToggle = element == .j
+                        shouldRemove = element == .seven
                     default:
                         break
                     }
                     if shouldToggle {
-                        boundaryFound = true
                         boundaryOdd.toggle()
+                        previousTurn = nil
                     }
-                } else if element == .pipe && isBoundary {
-                    boundaryFound = true
+                    if shouldRemove {
+                        previousTurn = nil
+                    }
+                } else if element == .pipe {
                     boundaryOdd.toggle()
+                } else {
+                    if isInside {
+                        count += 1
+                    }
                 }
 
                 if [.l, .f].contains(element) {
