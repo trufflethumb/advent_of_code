@@ -9,8 +9,7 @@ let content = try String(contentsOf: input)
 
 // Part 1 = 7145
 func partOne() {
-    let input = parsePartOne(content)
-    let steps = boundary(input).count
+    let steps = parsePartOne(content).boundary().count
     print((steps + 1)/2)
 }
 partOne()

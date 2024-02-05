@@ -40,7 +40,7 @@ final class Day10PartOneTest: XCTestCase {
 
     func test_examplePartOne_completeExample() throws {
         let input = parsePartOne(example)
-        let sut = boundary(input).count - 1
+        let sut = input.boundary().count - 1
         XCTAssertEqual(sut, 7)
     }
 }

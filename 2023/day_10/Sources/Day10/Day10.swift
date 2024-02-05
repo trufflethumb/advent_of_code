@@ -55,6 +55,20 @@ public struct PartOneInput {
             return nil
         }
     }
+
+    public func boundary() -> Set<Coordinate> {
+        var currentDirection = startingDirections[0]
+        var currentCoordinate = startingPosition.go(currentDirection)
+        var coordinates: Set<Coordinate> = [currentCoordinate]
+
+        while let next = next(at: currentCoordinate, currentDirection: currentDirection) {
+            currentDirection = next
+            currentCoordinate = currentCoordinate.go(next)
+            coordinates.insert(currentCoordinate)
+        }
+
+        return coordinates
+    }
 }
 
 public enum MapElement: Character, ExpressibleByStringLiteral {
@@ -134,16 +148,3 @@ public func parsePartOne(_ input: String) -> PartOneInput {
     return PartOneInput(startingPosition: startingPosition, map: array)
 }
 
-public func boundary(_ input: PartOneInput) -> Set<Coordinate> {
-    var currentDirection = input.startingDirections[0]
-    var currentCoordinate = input.startingPosition.go(currentDirection)
-    var coordinates: Set<Coordinate> = [currentCoordinate]
-    
-    while let next = input.next(at: currentCoordinate, currentDirection: currentDirection) {
-        currentDirection = next
-        currentCoordinate = currentCoordinate.go(next)
-        coordinates.insert(currentCoordinate)
-    }
-
-    return coordinates
-}
