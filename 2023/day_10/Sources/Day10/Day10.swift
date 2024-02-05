@@ -105,8 +105,12 @@ public struct PartOneInput {
             return nil
         }
     }
-    
-    public func trimRow(_ row: [MapElement]) -> [MapElement] {
+
+    public func trimedMap() -> [ArraySlice<MapElement>] {
+        map.map(trimRow)
+    }
+
+    public func trimRow(_ row: [MapElement]) -> ArraySlice<MapElement> {
         var startIndex: Int?
         var endIndex: Int?
         for i in 0 ..< (row.count + 1) / 2 {
@@ -122,17 +126,20 @@ public struct PartOneInput {
             }
         }
         guard let startIndex, let endIndex else { return [] }
-        return Array(row[startIndex ... endIndex])
+        return row[startIndex ... endIndex]
     }
 
     public func enclosedTiles() -> Int {
         var count = 0
-        for row in map {
-            let trimmedRow = trimRow(row)
+        let boundaryTiles = boundary()
+        let trimmedMap = trimedMap()
+        for (x, row) in trimmedMap.enumerated() {
             var boundaryOdd = false
             var boundaryFound = false
             var previousTurn: MapElement?
-            for element in trimmedRow {
+            for (y, element) in zip(row.indices, row) {
+                let element = element == .start ? startingPositionReplacement() : element
+                let isBoundary = boundaryTiles.contains([x, y])
                 let isInside = boundaryOdd
                 && boundaryFound
                 if element == .dot {
@@ -153,7 +160,7 @@ public struct PartOneInput {
                         boundaryFound = true
                         boundaryOdd.toggle()
                     }
-                } else if element == .pipe {
+                } else if element == .pipe && isBoundary {
                     boundaryFound = true
                     boundaryOdd.toggle()
                 }

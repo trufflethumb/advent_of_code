@@ -36,4 +36,15 @@ final class Day10PartTwoTest: XCTestCase {
         let sut = parsePartOne(example1b)
         XCTAssertEqual(sut.startingPositionReplacement(), .seven)
     }
+
+    func test_examplePartTwo_example1() {
+        let sut = parsePartOne(example1PartTwo)
+        XCTAssertEqual(sut.enclosedTiles(), 4)
+    }
+
+    func test_examplePartTwo_example2() {
+        let sut = parsePartOne(example2PartTwo)
+        XCTAssertEqual(sut.enclosedTiles(), 8)
+    }
+
 }
