@@ -55,6 +55,66 @@ public struct PartOneInput {
             return nil
         }
     }
+    
+    public func trimRow(_ row: [MapElement]) -> [MapElement] {
+        var startIndex: Int?
+        var endIndex: Int?
+        for i in 0 ..< (row.count + 1) / 2 {
+            if startIndex != nil && endIndex != nil {
+                break
+            }
+
+            if startIndex == nil && row[i] != .dot {
+                startIndex = i
+            }
+            if endIndex == nil && row[row.endIndex - i - 1] != .dot {
+                endIndex = row.endIndex - i - 1
+            }
+        }
+        guard let startIndex, let endIndex else { return [] }
+        return Array(row[startIndex ... endIndex])
+    }
+
+    public func enclosedTiles() -> Int {
+        var count = 0
+        for row in map {
+            let trimmedRow = trimRow(row)
+            var boundaryOdd = false
+            var boundaryFound = false
+            var previousTurn: MapElement?
+            for element in trimmedRow {
+                let isInside = boundaryOdd
+                && boundaryFound
+                if element == .dot {
+                    if isInside {
+                        count += 1
+                    }
+                } else if let foundPreviousTurn = previousTurn {
+                    var shouldToggle = false
+                    switch foundPreviousTurn {
+                    case .l:
+                        shouldToggle = element == .seven
+                    case .f:
+                        shouldToggle = element == .j
+                    default:
+                        break
+                    }
+                    if shouldToggle {
+                        boundaryFound = true
+                        boundaryOdd.toggle()
+                    }
+                } else if element == .pipe {
+                    boundaryFound = true
+                    boundaryOdd.toggle()
+                }
+
+                if [.l, .f].contains(element) {
+                    previousTurn = element
+                }
+            }
+        }
+        return count
+    }
 
     public func boundary() -> Set<Coordinate> {
         var currentDirection = startingDirections[0]
