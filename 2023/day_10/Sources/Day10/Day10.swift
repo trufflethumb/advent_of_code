@@ -14,6 +14,56 @@ public struct PartOneInput {
             }
     }
 
+    public func startingPositionReplacement() -> MapElement {
+        let startingDirections = startingDirections
+        let other: (Direction) -> Direction = { direction in
+            startingDirections.first(where: { $0 != direction })!
+        }
+        var startingPositionReplacement: MapElement = .start
+        if startingDirections.contains(.left) {
+            switch other(.left) {
+            case .down:
+                startingPositionReplacement = .seven
+            case .up:
+                startingPositionReplacement = .j
+            case .right:
+                startingPositionReplacement = .dash
+            default: break
+            }
+        } else if startingDirections.contains(.up) {
+            switch other(.up) {
+            case .down:
+                startingPositionReplacement = .pipe
+            case .left:
+                startingPositionReplacement = .j
+            case .right:
+                startingPositionReplacement = .l
+            default: break
+            }
+        } else if startingDirections.contains(.right) {
+            switch other(.right) {
+            case .down:
+                startingPositionReplacement = .f
+            case .left:
+                startingPositionReplacement = .dash
+            case .up:
+                startingPositionReplacement = .l
+            default: break
+            }
+        } else if startingDirections.contains(.down) {
+            switch other(.down) {
+            case .up:
+                startingPositionReplacement = .pipe
+            case .left:
+                startingPositionReplacement = .j
+            case .right:
+                startingPositionReplacement = .l
+            default: break
+            }
+        }
+        return startingPositionReplacement
+    }
+
     public func char(at coord: Coordinate) -> MapElement? {
         guard map.indices.contains(coord.x),
               map[0].indices.contains(coord.y) else {
