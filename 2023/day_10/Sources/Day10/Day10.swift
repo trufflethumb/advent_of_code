@@ -160,7 +160,7 @@ public struct PartOneInput {
                     switch foundPreviousTurn {
                     case .l:
                         shouldToggle = element == .seven
-                        shouldRemove = element == .l
+                        shouldRemove = element == .j
                     case .f:
                         shouldToggle = element == .j
                         shouldRemove = element == .seven
@@ -176,14 +176,12 @@ public struct PartOneInput {
                     }
                 } else if element == .pipe {
                     boundaryOdd.toggle()
-                } else {
+                } else if [.l, .f].contains(element) {
+                    previousTurn = element
+                } else if element == .dot {
                     if isInside {
                         count += 1
                     }
-                }
-
-                if [.l, .f].contains(element) {
-                    previousTurn = element
                 }
             }
         }
