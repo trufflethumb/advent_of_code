@@ -34,13 +34,18 @@ import Testing
     1 3 6 7 9
     """
 
-    @Test func part1() throws {
+    @Test() func part1() throws {
         #expect(rows(input).count { row in
             isSafe(row)
         } == 2)
 
-         print(rows(try parse(2)).count { row in
-             isSafe(row)
-         })
+        print(rows(try parse(2)).count { row in
+            isSafe(row)
+        })
+    }
+
+    @Test(.disabled()) func part2() throws {
+        #expect(isSafeWithDamper(rows(input)[3]) == true)
+        #expect(isSafeWithDamper(rows(input)[1]) == false)
     }
 }
