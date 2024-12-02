@@ -2,7 +2,14 @@ import Foundation
 
 func rows(_ input: String) -> [[Int]] {
     let lines = input.components(separatedBy: "\n")
-    return lines.map { $0.components(separatedBy: " ").compactMap(Int.init) }
+    return lines.compactMap {
+        if $0.isEmpty {
+            return nil
+        }
+        return $0
+            .components(separatedBy: " ")
+            .compactMap(Int.init)
+    }
 }
 
 func isSafe(_ row: [Int]) -> Bool {
