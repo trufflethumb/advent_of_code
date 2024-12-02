@@ -6,7 +6,8 @@ func rows(_ input: String) -> [[Int]] {
         if $0.isEmpty {
             return nil
         }
-        return $0
+        return
+            $0
             .components(separatedBy: " ")
             .compactMap(Int.init)
     }
@@ -14,10 +15,10 @@ func rows(_ input: String) -> [[Int]] {
 
 func isSafe(_ row: [Int]) -> Bool {
 
-    let isIncreasing = row[0] < row[1]
+    let rowTrend = trend(0, 1, row)
 
     for i in stride(from: 0, to: row.count - 1, by: 1) {
-        if isSafeByIncrement(isIncreasing, i, i + 1, row) && isSafeByDiff(i, i + 1, row) {
+        if trend(i, i + 1, row) == rowTrend && isSafeByDiff(i, i + 1, row) {
             continue
         } else {
             return false
@@ -31,8 +32,15 @@ func diff(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Int {
     row[rhsIndex] - row[lhsIndex]
 }
 
-func isSafeByIncrement(_ isRowIncreasing: Bool, _ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Bool {
-    isRowIncreasing == (diff(lhsIndex, rhsIndex, row) > 0)
+func trend(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> TrendDirection {
+    switch (row[lhsIndex], row[rhsIndex]) {
+    case let (x, y) where x < y:
+        return .rising
+    case let (x, y) where x > y:
+        return .falling
+    default:
+        return .same
+    }
 }
 
 func isSafeByDiff(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Bool {
@@ -42,24 +50,27 @@ func isSafeByDiff(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Bool {
     return (minDiff...maxDiff).contains(abs(diff))
 }
 
+enum TrendDirection {
+    case rising, falling, same
+}
+
 func isSafeWithDamper(_ row: [Int]) -> Bool {
     var left = 0
     var right = 1
-    var rowIncreasing: Bool?
+    var prevTrend: TrendDirection?
     var suspects = [Int]()
     var suspectIndex = -1
 
     while left <= right, right < row.count {
         guard right - left <= 2 else { return false }
 
-        let curDiff = diff(left, right, row)
-        let isIncreasing = curDiff > 0
-        if isSafeByIncrement(rowIncreasing ?? isIncreasing, left, right, row) {
+        let currentTrend = trend(left, right, row)
+        if currentTrend != .same, currentTrend == (prevTrend ?? currentTrend) {
             if isSafeByDiff(left, right, row) {
+                prevTrend = currentTrend
                 if suspects.isEmpty {
                     left += 1
                     right = left + 1
-                    rowIncreasing = isIncreasing
                 } else {
                     left += 1
                     if left == suspects[suspectIndex] {
@@ -69,7 +80,6 @@ func isSafeWithDamper(_ row: [Int]) -> Bool {
                     if right == suspects[suspectIndex] {
                         right += 1
                     }
-                    rowIncreasing = isIncreasing
                 }
                 continue
             }
@@ -77,10 +87,13 @@ func isSafeWithDamper(_ row: [Int]) -> Bool {
 
         if suspects.isEmpty {
             suspects = [left, right]
+            if left - 1 >= 0 {
+                suspects.insert(left - 1, at: 0)
+            }
         }
         suspectIndex += 1
 
-        if suspectIndex == 2 {
+        if suspectIndex == suspects.count {
             return false
         }
 
@@ -92,7 +105,7 @@ func isSafeWithDamper(_ row: [Int]) -> Bool {
         if right == suspects[suspectIndex] {
             right += 1
         }
-        rowIncreasing = nil
+        prevTrend = nil
     }
 
     return true
