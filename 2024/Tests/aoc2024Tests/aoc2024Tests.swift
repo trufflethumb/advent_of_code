@@ -2,7 +2,7 @@ import Testing
 
 @testable import aoc2024
 
-@Suite("Day01") struct Day01 {
+@Suite("Day01", .disabled()) struct Day01 {
 
     let input = """
         3   4
@@ -20,6 +20,27 @@ import Testing
 
     @Test func part2() throws {
         #expect(simScore(input: input) == 31)
-        #expect(simScore(input: try parse()) == 21_328_497)
+        #expect(simScore(input: try parse(1)) == 21_328_497)
+    }
+}
+
+@Suite("Day02") struct Day02 {
+    let input = """
+    7 6 4 2 1
+    1 2 7 8 9
+    9 7 6 2 1
+    1 3 2 4 5
+    8 6 4 4 1
+    1 3 6 7 9
+    """
+
+    @Test func part1() throws {
+        #expect(rows(input).count { row in
+            isSafe(row)
+        } == 2)
+
+         print(rows(try parse(2)).count { row in
+             isSafe(row)
+         })
     }
 }

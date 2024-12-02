@@ -3,6 +3,10 @@
 
 import PackageDescription
 
+let inputFiles = (1...2).map { day in
+    Resource.process(String(format: "Resources/input%.2d.txt", day))
+}
+
 let package = Package(
     name: "aoc2024",
     products: [
@@ -16,7 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "aoc2024",
-            resources: [.process("Resources/input01.txt")]
+            resources: inputFiles
         ),
         .testTarget(
             name: "aoc2024Tests",
