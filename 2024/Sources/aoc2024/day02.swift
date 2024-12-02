@@ -19,12 +19,13 @@ func isSafe(_ row: [Int]) -> Bool {
     return true
 }
 
+/// right - left
 func diff(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Int {
-    row[lhsIndex] - row[rhsIndex]
+    row[rhsIndex] - row[lhsIndex]
 }
 
 func isSafeByIncrement(_ isRowIncreasing: Bool, _ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Bool {
-    isRowIncreasing == (diff(lhsIndex, rhsIndex, row) < 0)
+    isRowIncreasing == (diff(lhsIndex, rhsIndex, row) > 0)
 }
 
 func isSafeByDiff(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Bool {
@@ -34,4 +35,58 @@ func isSafeByDiff(_ lhsIndex: Int, _ rhsIndex: Int, _ row: [Int]) -> Bool {
     return (minDiff...maxDiff).contains(abs(diff))
 }
 
-func isSafeWithDamper(_ row: [Int]) -> Bool { false }
+func isSafeWithDamper(_ row: [Int]) -> Bool {
+    var left = 0
+    var right = 1
+    var rowIncreasing: Bool?
+    var suspects = [Int]()
+    var suspectIndex = -1
+
+    while left <= right, right < row.count {
+        guard right - left <= 2 else { return false }
+
+        let curDiff = diff(left, right, row)
+        let isIncreasing = curDiff > 0
+        if isSafeByIncrement(rowIncreasing ?? isIncreasing, left, right, row) {
+            if isSafeByDiff(left, right, row) {
+                if suspects.isEmpty {
+                    left += 1
+                    right = left + 1
+                    rowIncreasing = isIncreasing
+                } else {
+                    left += 1
+                    if left == suspects[suspectIndex] {
+                        left += 1
+                    }
+                    right = left + 1
+                    if right == suspects[suspectIndex] {
+                        right += 1
+                    }
+                    rowIncreasing = isIncreasing
+                }
+                continue
+            }
+        }
+
+        if suspects.isEmpty {
+            suspects = [left, right]
+        }
+        suspectIndex += 1
+
+        if suspectIndex == 2 {
+            return false
+        }
+
+        left = 0
+        if left == suspects[suspectIndex] {
+            left += 1
+        }
+        right = left + 1
+        if right == suspects[suspectIndex] {
+            right += 1
+        }
+        rowIncreasing = nil
+    }
+
+    return true
+}
