@@ -2,9 +2,9 @@ import Foundation
 
 func parse(_ day: Int) throws -> String {
     let file = String(format: "input%.2d", day)
-    guard let input = Bundle.module.url(forResource:file, withExtension: "txt") else {
+    guard let input = Bundle.module.url(forResource: file, withExtension: "txt") else {
         throw NSError(domain: "Unable to find file", code: 0)
-    } 
+    }
     return try String(contentsOf: input)
 }
 
