@@ -122,8 +122,8 @@ import Testing
                 result + pair.0 * pair.1
             } == 161)
 
-        print(indices(try parse(3)).reduce(0) { result, pair in
+        #expect(indices(try parse(3)).reduce(0) { result, pair in
             result + pair.0 * pair.1
-        })
+        } == 168539636)
     }
 }
