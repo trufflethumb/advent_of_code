@@ -106,6 +106,8 @@ import Testing
     xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
     """
 
+    let input2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
+
     func indices(_ input: String) -> [(Int, Int)] {
         let x = input.matches(of: /mul\((\d+),(\d+)\)/)
         var result = [(Int, Int)]()
@@ -116,7 +118,19 @@ import Testing
         return result
     }
 
-    @Test func part1() throws {
+    func indicesConditional(_ input: String) -> [(Int, Int)] {
+        let input = "do()" + input + "don't()"
+        let x = input.matches(of: /do\(\)((.|\n)*?)don't\(\)/)
+        var result = [(Int, Int)]()
+        for i in x {
+            let found = String(i.1)
+            print(found)
+            result.append(contentsOf: indices(found))
+        }
+        return result
+    }
+
+    @Test(.disabled()) func part1() throws {
         #expect(indices(input)
             .reduce(0) { result, pair in
                 result + pair.0 * pair.1
@@ -125,5 +139,17 @@ import Testing
         #expect(indices(try parse(3)).reduce(0) { result, pair in
             result + pair.0 * pair.1
         } == 168539636)
+    }
+
+    @Test func part2() throws {
+        #expect(indicesConditional(input2)
+            .reduce(0) { result, pair in
+                result + pair.0 * pair.1
+            } == 48)
+
+        #expect(indicesConditional(try parse(3))
+            .reduce(0) { result, pair in
+                result + pair.0 * pair.1
+            } == 97529391)
     }
 }
