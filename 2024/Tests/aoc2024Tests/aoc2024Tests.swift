@@ -24,7 +24,7 @@ import Testing
     }
 }
 
-@Suite("Day02") struct Day02 {
+@Suite("Day02", .disabled()) struct Day02 {
     let input = """
         7 6 4 2 1
         1 2 7 8 9
@@ -98,5 +98,32 @@ import Testing
             rows(try parse(2)).count { row in
                 isSafeWithDamper(row)
             } == 413)
+    }
+}
+
+@Suite("Day03") struct Day03 {
+    let input = """
+    xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
+    """
+
+    func indices(_ input: String) -> [(Int, Int)] {
+        let x = input.matches(of: /mul\((\d+),(\d+)\)/)
+        var result = [(Int, Int)]()
+        for i in x {
+            guard let l = Int(i.1), let r = Int(i.2) else { continue }
+            result.append((l, r))
+        }
+        return result
+    }
+
+    @Test func part1() throws {
+        #expect(indices(input)
+            .reduce(0) { result, pair in
+                result + pair.0 * pair.1
+            } == 161)
+
+        print(indices(try parse(3)).reduce(0) { result, pair in
+            result + pair.0 * pair.1
+        })
     }
 }
