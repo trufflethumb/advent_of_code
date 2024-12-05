@@ -9,6 +9,7 @@ let inputFiles = (1...3).map { day in
 
 let package = Package(
     name: "aoc2024",
+    platforms: [.macOS(.v13)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(

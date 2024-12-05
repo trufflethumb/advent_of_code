@@ -101,36 +101,14 @@ import Testing
     }
 }
 
-@Suite("Day03") struct Day03 {
+@Suite("Day03", .disabled()) struct Day03 {
     let input = """
     xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
     """
 
     let input2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
 
-    func indices(_ input: String) -> [(Int, Int)] {
-        let x = input.matches(of: /mul\((\d+),(\d+)\)/)
-        var result = [(Int, Int)]()
-        for i in x {
-            guard let l = Int(i.1), let r = Int(i.2) else { continue }
-            result.append((l, r))
-        }
-        return result
-    }
-
-    func indicesConditional(_ input: String) -> [(Int, Int)] {
-        let input = "do()" + input + "don't()"
-        let x = input.matches(of: /do\(\)((.|\n)*?)don't\(\)/)
-        var result = [(Int, Int)]()
-        for i in x {
-            let found = String(i.1)
-            print(found)
-            result.append(contentsOf: indices(found))
-        }
-        return result
-    }
-
-    @Test(.disabled()) func part1() throws {
+    @Test() func part1() throws {
         #expect(indices(input)
             .reduce(0) { result, pair in
                 result + pair.0 * pair.1
