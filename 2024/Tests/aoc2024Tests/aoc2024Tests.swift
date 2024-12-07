@@ -168,6 +168,6 @@ import Testing
         S
         """
         #expect(searchAllDirections(parseBoard(verticalTest)) == 2)
-        print(searchAllDirections(parseBoard(try parse(4))))
+        #expect(searchAllDirections(parseBoard(try parse(4))) == 2543)
     }
 }
