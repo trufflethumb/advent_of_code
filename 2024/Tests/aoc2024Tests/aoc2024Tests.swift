@@ -131,3 +131,43 @@ import Testing
             } == 97529391)
     }
 }
+
+@Suite("Day04") struct Day04 {
+    let input = """
+    MMMSXXMASM
+    MSAMXMSMSA
+    AMXSXMAAMM
+    MSAMASMSMX
+    XMASAMXAMM
+    XXAMMXXAMA
+    SMSMSASXSS
+    SAXAMASAAA
+    MAMMMXMMMM
+    MXMXAXMASX
+    """
+
+    func parseBoard(_ input: String) -> [[Character]] {
+        input
+            .components(separatedBy: .newlines)
+            .map { Array($0) }
+    }
+
+    @Test func part1() throws {
+        #expect(searchAllDirections(parseBoard(input)) == 18)
+        #expect(searchAllDirections(parseBoard("XMAS")) == 1)
+        #expect(searchAllDirections(parseBoard("SAMX")) == 1)
+        #expect(searchAllDirections(parseBoard("SAMXMAS")) == 2)
+        #expect(searchAllDirections(parseBoard("SAMXMAS\nSAMXMAS")) == 4)
+        let verticalTest = """
+        S
+        A
+        M
+        X
+        M
+        A
+        S
+        """
+        #expect(searchAllDirections(parseBoard(verticalTest)) == 2)
+        print(searchAllDirections(parseBoard(try parse(4))))
+    }
+}

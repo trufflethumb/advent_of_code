@@ -5,7 +5,7 @@ func parse(_ day: Int) throws -> String {
     guard let input = Bundle.module.url(forResource: file, withExtension: "txt") else {
         throw NSError(domain: "Unable to find file", code: 0)
     }
-    return try String(contentsOf: input)
+    return try String(contentsOf: input).trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
 func toArray(_ string: String) -> ([Int], [Int]) {
