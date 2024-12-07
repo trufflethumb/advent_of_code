@@ -13,7 +13,7 @@ func searchOne(_ board: [[Character]], _ word: [Character], _ index: Int, _ row:
 }
 
 func searchOneDirection(_ board: [[Character]], _ word: [Character], _ row: Int, _ col: Int, drow: Int, dcol: Int) -> Bool {
-    for i in 1 ..< word.count {
+    for i in 0 ..< word.count {
         if !searchOne(board, word, i, row + drow * i, col + dcol * i) {
             return false
         }
@@ -49,5 +49,28 @@ func searchAllDirections(_ board: [[Character]]) -> Int {
             foundCount += search(board, toFindBackwards, row, col)
         }
     }
+    return foundCount
+}
+
+func searchSingleXMAS(_ board: [[Character]], _ row: Int, _ col: Int) -> Bool {
+    let word = Array("MAS")
+    let wordBackwards = Array("SAM")
+    return [
+        searchOneDirection(board, word, row - 1, col - 1, drow: 1, dcol: 1),
+        searchOneDirection(board, word, row + 1, col - 1, drow: -1, dcol: 1),
+        searchOneDirection(board, wordBackwards, row - 1, col - 1, drow: 1, dcol: 1),
+        searchOneDirection(board, wordBackwards, row + 1, col - 1, drow: -1, dcol: 1),
+    ].filter { $0 }.count == 2
+}
+
+func searchXMASes(_ board: [[Character]]) -> Int {
+    var foundCount = 0
+    for row in 1 ..< board.count - 1 {
+        for col in 1 ..< board[0].count - 1 {
+            guard board[row][col] == "A" else { continue }
+            foundCount += searchSingleXMAS(board, row, col) ? 1 : 0
+        }
+    }
+
     return foundCount
 }

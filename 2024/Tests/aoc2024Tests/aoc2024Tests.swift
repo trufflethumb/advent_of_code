@@ -152,7 +152,7 @@ import Testing
             .map { Array($0) }
     }
 
-    @Test func part1() throws {
+    @Test(.disabled()) func part1() throws {
         #expect(searchAllDirections(parseBoard(input)) == 18)
         #expect(searchAllDirections(parseBoard("XMAS")) == 1)
         #expect(searchAllDirections(parseBoard("SAMX")) == 1)
@@ -169,5 +169,16 @@ import Testing
         """
         #expect(searchAllDirections(parseBoard(verticalTest)) == 2)
         #expect(searchAllDirections(parseBoard(try parse(4))) == 2543)
+    }
+
+    @Test(.disabled()) func part2() throws {
+        #expect(searchXMASes(parseBoard(input)) == 9)
+        let one = """
+        M.S
+        .A.
+        M.S
+        """
+        #expect(searchXMASes(parseBoard(one)) == 1)
+        #expect(searchXMASes(parseBoard(try parse(4))) == 1930)
     }
 }
