@@ -12,63 +12,29 @@ func searchOne(_ board: [[Character]], _ word: [Character], _ index: Int, _ row:
     return board[row][col] == word[index]
 }
 
+func searchOneDirection(_ board: [[Character]], _ word: [Character], _ row: Int, _ col: Int, drow: Int, dcol: Int) -> Bool {
+    for i in 1 ..< word.count {
+        if !searchOne(board, word, i, row + drow * i, col + dcol * i) {
+            return false
+        }
+    }
+    return true
+}
+
 func search(_ board: [[Character]], _ word: [Character], _ row: Int, _ col: Int) -> Int {
     guard searchOne(board, word, 0, row, col) else {
         return 0
     }
 
     var total = 0
-    var found = true
     // check right
-    for i in 1 ..< word.count {
-        if !searchOne(board, word, i, row, col + i) {
-            found = false
-            break
-        }
-    }
-
-    if found {
-        total += 1
-    }
-
-    found = true
+    total += searchOneDirection(board, word, row, col, drow: 0, dcol: 1) ? 1 : 0
     // check down
-    for i in 1 ..< word.count {
-        if !searchOne(board, word, i, row + i, col) {
-            found = false
-            break
-        }
-    }
-
-    if found {
-        total += 1
-    }
-
-    found = true
-    // check upper right
-    for i in 1 ..< word.count {
-        if !searchOne(board, word, i, row - i, col + i) {
-            found = false
-            break
-        }
-    }
-
-    if found {
-        total += 1
-    }
-
-    found = true
-    // check lower right
-    for i in 1 ..< word.count {
-        if !searchOne(board, word, i, row + i, col + i) {
-            found = false
-            break
-        }
-    }
-
-    if found {
-        total += 1
-    }
+    total += searchOneDirection(board, word, row, col, drow: 1, dcol: 0) ? 1 : 0
+    // check upperight
+    total += searchOneDirection(board, word, row, col, drow: -1, dcol: 1) ? 1 : 0
+    // check lowerright
+    total += searchOneDirection(board, word, row, col, drow: 1, dcol: 1) ? 1 : 0
 
     return total
 }
