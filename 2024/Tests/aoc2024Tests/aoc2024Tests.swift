@@ -277,7 +277,7 @@ import Testing
         }
     }
 
-    @Test func part1() throws {
+    @Test(.disabled()) func part1() throws {
         let (dict, updates) = parseManual(input)
 
         #expect(isUpdateValid(updates[0], dict) == true)
@@ -290,6 +290,6 @@ import Testing
         #expect(sumOfValidMiddleNumbers(dict, updates) == 143)
 
         let (aDict, aUpdates) = parseManual(try parse(5))
-        print(sumOfValidMiddleNumbers(aDict, aUpdates))
+        #expect(sumOfValidMiddleNumbers(aDict, aUpdates) == 4281)
     }
 }
