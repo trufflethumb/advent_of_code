@@ -262,6 +262,18 @@ import Testing
         return true
     }
 
+    func fixIssues(_ update: [Int], _ dict: [Int: Set<Int>]) -> [Int] {
+        var update = update
+        for i in 0 ..< update.count - 1 {
+            for j in i + 1 ..< update.count {
+                if !isPage(update[i], before: update[j], dict) {
+                    update.swapAt(i, j)
+                }
+            }
+        }
+        return update
+    }
+
     func middleNumber(_ update: [Int]) -> Int {
         guard update.count > 2 else { return 0 }
         return update[update.count / 2]
@@ -271,6 +283,17 @@ import Testing
         updates.reduce(0) { sum, update in
             if isUpdateValid(update, dict) {
                 return sum + middleNumber(update)
+            } else {
+                return sum
+            }
+        }
+    }
+
+    func sumOfFixedMiddleNumbers(_ dict: [Int: Set<Int>], _ updates: [[Int]]) -> Int {
+        updates.reduce(0) { sum, update in
+            if !isUpdateValid(update, dict) {
+                let fixed = fixIssues(update, dict)
+                return sum + middleNumber(fixed)
             } else {
                 return sum
             }
@@ -291,5 +314,24 @@ import Testing
 
         let (aDict, aUpdates) = parseManual(try parse(5))
         #expect(sumOfValidMiddleNumbers(aDict, aUpdates) == 4281)
+    }
+
+    @Test func part2() throws {
+        let (dict, updates) = parseManual(input)
+        #expect(fixIssues(updates[3], dict) == [97,75,47,61,53])
+        #expect(fixIssues(updates[4], dict) == [61,29,13])
+        #expect(fixIssues(updates[5], dict) == [97,75,47,29,13])
+
+        #expect(isUpdateValid(fixIssues(updates[0], dict), dict) == true)
+        #expect(isUpdateValid(fixIssues(updates[1], dict), dict) == true)
+        #expect(isUpdateValid(fixIssues(updates[2], dict), dict) == true)
+        #expect(isUpdateValid(fixIssues(updates[3], dict), dict) == true)
+        #expect(isUpdateValid(fixIssues(updates[4], dict), dict) == true)
+        #expect(isUpdateValid(fixIssues(updates[5], dict), dict) == true)
+
+        #expect(sumOfFixedMiddleNumbers(dict, updates) == 123)
+
+        let (aDict, aUpdates) = parseManual(try parse(5))
+        #expect(sumOfFixedMiddleNumbers(aDict, aUpdates) == 5466)
     }
 }
