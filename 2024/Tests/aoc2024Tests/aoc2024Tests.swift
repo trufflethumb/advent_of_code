@@ -250,3 +250,24 @@ import Testing
         #expect(sumOfFixedMiddleNumbers(aDict, aUpdates) == 5466)
     }
 }
+
+@Suite("Day06") struct Day06 {
+
+    let input = """
+    ....#.....
+    .........#
+    ..........
+    ..#.......
+    .......#..
+    ..........
+    .#..^.....
+    ........#.
+    #.........
+    ......#...
+    """
+
+    @Test(.disabled()) func part1() throws {
+        #expect(walkAll(input) == 41)
+        #expect(walkAll(try parse(6)) == 5551)
+    }
+}
