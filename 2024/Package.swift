@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let inputFiles = (1...6).map { day in
+let inputFiles = (Array(1...6) + [10]).map { day in
     Resource.process(String(format: "Resources/input%.2d.txt", day))
 }
 

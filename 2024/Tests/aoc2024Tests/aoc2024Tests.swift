@@ -278,3 +278,35 @@ import Testing
         #expect(walkAll(edgeCase) == 2)
     }
 }
+
+@Suite("Day10", .disabled()) struct Day10 {
+    let input1 = """
+    ...0...
+    ...1...
+    ...2...
+    6543456
+    7.....7
+    8.....8
+    9.....9
+    """
+
+    let input2 = """
+    ..90..9
+    ...1.98
+    ...2..7
+    6543456
+    765.987
+    876....
+    987....
+    """
+
+    @Test func part1() throws {
+        #expect(findScoreOfUniqueTrails(parseMountain(input1)) == 2)
+        #expect(findScoreOfUniqueTrails(parseMountain(input2)) == 4)
+        #expect(findScoreOfUniqueTrails(parseMountain(try parse(10))) == 593)
+    }
+
+    @Test func part2() throws {
+        #expect(findScoreOfAllTrails(parseMountain(try parse(10))) == 1192)
+    }
+}
