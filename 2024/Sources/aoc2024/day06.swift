@@ -74,6 +74,7 @@ func walkAll(_ input: String) -> Int {
         switch checkNextStep(field, &row, &col, dir: dir) {
         case "obstacle":
             dir = (dir + 1) % 4
+            continue
         case "bound":
             stop = true
         default:
