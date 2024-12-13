@@ -6,11 +6,13 @@
 //
 // 0 = north, 1 = east, 2 = south, 3 = west
 
-func patrol(_ field: inout [[Character]], _ row: Int, _ col: Int, uniqueSteps: inout Int) {
+/// returns whether the step was new
+func patrol(_ field: inout [[Character]], _ row: Int, _ col: Int) -> Bool {
     if field[row][col] == "." {
         field[row][col] = "X"
-        uniqueSteps += 1
+        return true
     }
+    return false
 }
 
 func parseField(_ string: String) -> (field: [[Character]], start: [Int]) {
@@ -50,7 +52,9 @@ func checkNextStep(_ field: [[Character]], _ row: Int, _ col: Int, dir: Int) -> 
         fatalError("Unsupported direction")
     }
 
-    if field[row + dr][col + dc] == "#" {
+    let char = field[row + dr][col + dc]
+
+    if char == "#" {
         return ("obstacle", dr, dc)
     } else if row + dr == 0 || col + dc == 0 || row + dr == field.count - 1 || col + dc == field[0].count - 1 {
         return ("bound", dr, dc)
@@ -70,7 +74,7 @@ func walkAll(_ input: String) -> Int {
         let (result, dr, dc) = checkNextStep(field, row, col, dir: dir)
         switch result {
         case "obstacle":
-            dir = (dir + 1) % 4
+            dir = turnRight(dir)
             continue
         case "bound":
             row += dr
@@ -82,10 +86,16 @@ func walkAll(_ input: String) -> Int {
             break
         }
 
-        patrol(&field, row, col, uniqueSteps: &uniqueSteps)
+        if patrol(&field, row, col) {
+            uniqueSteps += 1
+        }
     }
 
     return uniqueSteps
+}
+
+func turnRight(_ dir: Int) -> Int {
+    (dir + 1) % 4
 }
 
 func printField(_ field: [[Character]], _ guardRow: Int, _ guardCol: Int, _ direction: Int) {
