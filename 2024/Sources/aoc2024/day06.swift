@@ -58,12 +58,16 @@ func checkNextStep(_ field: [[Character]], _ row: Int, _ col: Int, dir: Int) -> 
         fatalError("Unsupported direction")
     }
 
+    if row + dr < 0 || col + dc < 0 || row + dr == field.count || col + dc == field[0].count {
+        return ("bound", dr, dc)
+    }
+
     let char = field[row + dr][col + dc]
 
     if char == "#" {
         return ("obstacle", dr, dc)
-    } else if row + dr == 0 || col + dc == 0 || row + dr == field.count - 1 || col + dc == field[0].count - 1 {
-        return ("bound", dr, dc)
+    } else if char == "O" {
+        return ("added_obstacle", dr, dc)
     } else {
         return ("free", dr, dc)
     }
@@ -81,8 +85,6 @@ func walkAll(_ input: String) throws -> Int {
             dir = turnRight(dir)
             continue
         case "bound":
-            row += dr
-            col += dc
             stop = true
         default:
             row += dr
@@ -98,45 +100,70 @@ func walkAll(_ input: String) throws -> Int {
     return uniqueSteps
 }
 
+func encode<T>(_ matrix: [[T]], r: Int, c: Int) -> Int {
+    let rows = matrix.count
+    return rows * c + r
+}
+
 func detectLoop(_ field: [[Character]], _ startRow: Int, _ startCol: Int, startDir: Int) -> Bool {
     var row = startRow
     var col = startCol
     var dir = startDir
     var field = field
-    var stop = false
-    var pastFirst = false
-    while !stop {
+    var footprint = [Int: Set<Int>]()
+
+    while true {
         let (result, dr, dc) = checkNextStep(field, row, col, dir: dir)
 
-        if row == startRow,
-           col == startCol,
-           dir == startDir,
-           pastFirst
-        {
+        if let dirs = footprint[encode(field, r: row, c: col)],
+           dirs.contains(dir) {
             return true
+        } else {
+            footprint[encode(field, r: row, c: col), default: []].insert(dir)
         }
 
-        pastFirst = true
-
         switch result {
-        case "obstacle":
+        case "obstacle", "added_obstacle":
             dir = turnRight(dir)
             continue
         case "bound":
-            row += dr
-            col += dc
-            stop = true
+            return false
         default:
             row += dr
             col += dc
         }
 
         _ = patrol(&field, row, col)
-
     }
-
-    return false
 }
+
+func countAllLoops(_ field: [[Character]], _ startRow: Int, _ startCol: Int) -> Int {
+    var (field, row, col) = (field, startRow, startCol)
+    var dir = 0
+    var loops = 0
+    while true {
+        let (result, dr, dc) = checkNextStep(field, row, col, dir: dir)
+        switch result {
+        case "obstacle":
+            dir = turnRight(dir)
+            continue
+        case "bound":
+            return loops
+        default:
+            field[row + dr][col + dc] = "O"
+            if !(startRow == row + dr && startCol == col + dc),
+               detectLoop(field, row, col, startDir: turnRight(dir)) {
+                loops += 1
+            }
+            field[row + dr][col + dc] = "."
+            row += dr
+            col += dc
+        }
+
+        _ = patrol(&field, row, col)
+    }
+}
+
 func turnRight(_ dir: Int) -> Int {
     (dir + 1) % 4
 }

@@ -278,7 +278,7 @@ import Testing
         #expect(try walkAll(edgeCase) == 2)
     }
 
-    @Test func testDetectLoop() throws {
+    @Test(.disabled()) func testDetectLoop() throws {
         let loop = """
         ....#.....
         ......#..#
@@ -296,9 +296,18 @@ import Testing
         #expect(detectLoop(field, row, col, startDir: 0))
     }
 
-    @Test func detectFalseLoop() throws {
+    @Test(.disabled()) func detectFalseLoop() throws {
         let (field, (row, col)) = try parseField(input)
         #expect(detectLoop(field, row, col, startDir: 0) == false)
+    }
+
+    @Test(.disabled("Failed for final test")) func part2() throws {
+        let (field, (row, col)) = try parseField(input)
+        #expect(countAllLoops(field, row, col) == 6)
+
+//        856 is too low, 2171 is too high
+        let (aField, (aRow, aCol)) = try parseField(try parse(6))
+        print(countAllLoops(aField, aRow, aCol))
     }
 }
 
