@@ -267,15 +267,15 @@ import Testing
     """
 
     @Test(.disabled()) func part1() throws {
-        #expect(walkAll(input) == 41)
-        #expect(walkAll(try parse(6)) == 5551)
+        #expect(try walkAll(input) == 41)
+        #expect(try walkAll(try parse(6)) == 5551)
 
         let edgeCase = """
         .#.
         .^#
         ...
         """
-        #expect(walkAll(edgeCase) == 2)
+        #expect(try walkAll(edgeCase) == 2)
     }
 }
 

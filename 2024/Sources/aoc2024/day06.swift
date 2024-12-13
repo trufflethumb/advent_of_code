@@ -6,6 +6,8 @@
 //
 // 0 = north, 1 = east, 2 = south, 3 = west
 
+import Foundation
+
 /// returns whether the step was new
 func patrol(_ field: inout [[Character]], _ row: Int, _ col: Int) -> Bool {
     if field[row][col] == "." {
@@ -15,19 +17,23 @@ func patrol(_ field: inout [[Character]], _ row: Int, _ col: Int) -> Bool {
     return false
 }
 
-func parseField(_ string: String) -> (field: [[Character]], start: [Int]) {
+func parseField(_ string: String) throws -> (field: [[Character]], start: (Int, Int)) {
     var result = [[Character]]()
-    var guardCoord = [Int]()
+    var guardCoord: (Int, Int)?
     for (row, line) in string.components(separatedBy: .newlines).enumerated() {
         for (col, character) in line.enumerated() {
             if character == "^" {
-                guardCoord = [row, col]
+                guardCoord = (row, col)
             }
         }
         result.append(Array(line))
     }
 
-    result[guardCoord[0]][guardCoord[1]] = "X"
+    guard let guardCoord else {
+        throw NSError(domain: "Missing Guard", code: 0)
+    }
+
+    result[guardCoord.0][guardCoord.1] = "X"
 
     return (result, guardCoord)
 }
@@ -63,10 +69,8 @@ func checkNextStep(_ field: [[Character]], _ row: Int, _ col: Int, dir: Int) -> 
     }
 }
 
-func walkAll(_ input: String) -> Int {
-    var (field, guardCoord) = parseField(input)
-    var row = guardCoord[0]
-    var col = guardCoord[1]
+func walkAll(_ input: String) throws -> Int {
+    var (field, (row, col)) = try parseField(input)
     var dir = 0
     var uniqueSteps = 1
     var stop = false
