@@ -30,7 +30,7 @@ func parseField(_ string: String) -> (field: [[Character]], start: [Int]) {
     return (result, guardCoord)
 }
 
-func checkNextStep(_ field: [[Character]], _ row: inout Int, _ col: inout Int, dir: Int) -> String {
+func checkNextStep(_ field: [[Character]], _ row: Int, _ col: Int, dir: Int) -> (String, dr: Int, dc: Int) {
     let dr: Int
     let dc: Int
     switch dir {
@@ -51,15 +51,11 @@ func checkNextStep(_ field: [[Character]], _ row: inout Int, _ col: inout Int, d
     }
 
     if field[row + dr][col + dc] == "#" {
-        return "obstacle"
+        return ("obstacle", dr, dc)
     } else if row + dr == 0 || col + dc == 0 || row + dr == field.count - 1 || col + dc == field[0].count - 1 {
-        row += dr
-        col += dc
-        return "bound"
+        return ("bound", dr, dc)
     } else {
-        row += dr
-        col += dc
-        return "free"
+        return ("free", dr, dc)
     }
 }
 
@@ -71,13 +67,18 @@ func walkAll(_ input: String) -> Int {
     var uniqueSteps = 1
     var stop = false
     while !stop {
-        switch checkNextStep(field, &row, &col, dir: dir) {
+        let (result, dr, dc) = checkNextStep(field, row, col, dir: dir)
+        switch result {
         case "obstacle":
             dir = (dir + 1) % 4
             continue
         case "bound":
+            row += dr
+            col += dc
             stop = true
         default:
+            row += dr
+            col += dc
             break
         }
 
