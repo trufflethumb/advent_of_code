@@ -277,6 +277,29 @@ import Testing
         """
         #expect(try walkAll(edgeCase) == 2)
     }
+
+    @Test func testDetectLoop() throws {
+        let loop = """
+        ....#.....
+        ......#..#
+        ..........
+        ..#.......
+        .......#..
+        ..........
+        .#.#^.....
+        .....#..#.
+        #.........
+        ......#...
+        """
+
+        let (field, (row, col)) = try parseField(loop)
+        #expect(detectLoop(field, row, col, startDir: 0))
+    }
+
+    @Test func detectFalseLoop() throws {
+        let (field, (row, col)) = try parseField(input)
+        #expect(detectLoop(field, row, col, startDir: 0) == false)
+    }
 }
 
 @Suite("Day10", .disabled()) struct Day10 {

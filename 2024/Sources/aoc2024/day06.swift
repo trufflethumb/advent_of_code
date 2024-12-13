@@ -98,6 +98,45 @@ func walkAll(_ input: String) throws -> Int {
     return uniqueSteps
 }
 
+func detectLoop(_ field: [[Character]], _ startRow: Int, _ startCol: Int, startDir: Int) -> Bool {
+    var row = startRow
+    var col = startCol
+    var dir = startDir
+    var field = field
+    var stop = false
+    var pastFirst = false
+    while !stop {
+        let (result, dr, dc) = checkNextStep(field, row, col, dir: dir)
+
+        if row == startRow,
+           col == startCol,
+           dir == startDir,
+           pastFirst
+        {
+            return true
+        }
+
+        pastFirst = true
+
+        switch result {
+        case "obstacle":
+            dir = turnRight(dir)
+            continue
+        case "bound":
+            row += dr
+            col += dc
+            stop = true
+        default:
+            row += dr
+            col += dc
+        }
+
+        _ = patrol(&field, row, col)
+
+    }
+
+    return false
+}
 func turnRight(_ dir: Int) -> Int {
     (dir + 1) % 4
 }
