@@ -375,8 +375,24 @@ import Testing
         return result
     }
 
-    func defrag() {
+    func defrag(_ expandedDisk: [Int?]) -> [Int?] {
+        var lhs = 0
+        var rhs = expandedDisk.count - 1
+        var defraged = expandedDisk
+        while lhs < rhs {
+            guard defraged[lhs] == nil else {
+                lhs += 1
+                continue
+            }
 
+            guard defraged[rhs] != nil else {
+                rhs -= 1
+                continue
+            }
+
+            defraged.swapAt(lhs, rhs)
+        }
+        return defraged
     }
 
     func checksum() {
@@ -393,6 +409,18 @@ import Testing
         let input = "2333133121414131402"
         let exp = "00...111...2...333.44.5555.6666.777.888899"
         #expect(expandBlocks(parseDisk(input)) == parseExpanded(exp))
+    }
+
+    @Test func testDefrag() {
+        let input = "0..111....22222"
+        let exp = "022111222......"
+        #expect(defrag(parseExpanded(input)) == parseExpanded(exp))
+    }
+
+    @Test func testDefrag2() {
+        let input = "00...111...2...333.44.5555.6666.777.888899"
+        let exp = "0099811188827773336446555566.............."
+        #expect(defrag(parseExpanded(input)) == parseExpanded(exp))
     }
 
     @Test func part1() throws {
