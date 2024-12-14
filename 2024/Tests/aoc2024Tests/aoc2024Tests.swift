@@ -395,6 +395,13 @@ import Testing
         return defraged
     }
 
+    func printFirst(_ digits: Int, _ result: [Int?]) {
+        for i in 0 ..< digits {
+            print(result[i] ?? ".", terminator: "")
+        }
+        print("\n")
+    }
+
     func checksum(_ defraged: [Int?]) -> Int {
         var result = 0
         for (index, element) in defraged.enumerated() {
