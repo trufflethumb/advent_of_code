@@ -434,11 +434,14 @@ import Testing
         #expect(checksum(parseExpanded(input)) == exp)
     }
 
-    @Test func part1() throws {
+    @Test(.disabled()) func part1() throws {
         // expand blocks
+        let expandedBlocks = expandBlocks(parseDisk(try parse(9)))
 
         // defrag
+        let defraged = defrag(expandedBlocks)
 
         // checksum
+        #expect(checksum(defraged) == 6242766523059)
     }
 }
