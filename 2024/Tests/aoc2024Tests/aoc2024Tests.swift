@@ -342,3 +342,64 @@ import Testing
         #expect(findScoreOfAllTrails(parseMountain(try parse(10))) == 1192)
     }
 }
+
+@Suite("Day09") struct Day09 {
+    let input = "2333133121414131402"
+
+    func parseDisk(_ input: String) -> [Int] {
+        input.compactMap { Int(String($0)) }
+    }
+
+    func parseExpanded(_ input: String) -> [Int?] {
+        input.map { Int(String($0)) }
+    }
+
+    func makeInts(_ digit: Int, repeats: Int) -> [Int] {
+        [Int](repeating: digit, count: repeats)
+    }
+
+    func makeNilInts(repeats: Int) -> [Int?] {
+        [Int?](repeating: nil, count: repeats)
+    }
+
+    func expandBlocks(_ input: [Int]) -> [Int?] {
+        var result = [Int?]()
+        for i in 0 ..< input.count {
+            let repeats = input[i]
+            if i % 2 == 0 {
+                result.append(contentsOf: makeInts(i / 2, repeats: repeats))
+            } else {
+                result.append(contentsOf: makeNilInts(repeats: repeats))
+            }
+        }
+        return result
+    }
+
+    func defrag() {
+
+    }
+
+    func checksum() {
+
+    }
+
+    @Test func testExpandBlocks() {
+        let input = "12345"
+        let exp = "0..111....22222"
+        #expect(expandBlocks(parseDisk(input)) == parseExpanded(exp))
+    }
+
+    @Test func testExpandBlocks2() {
+        let input = "2333133121414131402"
+        let exp = "00...111...2...333.44.5555.6666.777.888899"
+        #expect(expandBlocks(parseDisk(input)) == parseExpanded(exp))
+    }
+
+    @Test func part1() throws {
+        // expand blocks
+
+        // defrag
+
+        // checksum
+    }
+}
