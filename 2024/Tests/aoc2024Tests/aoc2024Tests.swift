@@ -395,8 +395,13 @@ import Testing
         return defraged
     }
 
-    func checksum() {
-
+    func checksum(_ defraged: [Int?]) -> Int {
+        var result = 0
+        for (index, element) in defraged.enumerated() {
+            guard let element else { break }
+            result += index * element
+        }
+        return result
     }
 
     @Test func testExpandBlocks() {
@@ -421,6 +426,12 @@ import Testing
         let input = "00...111...2...333.44.5555.6666.777.888899"
         let exp = "0099811188827773336446555566.............."
         #expect(defrag(parseExpanded(input)) == parseExpanded(exp))
+    }
+
+    @Test func testChecksum() {
+        let input = "0099811188827773336446555566.............."
+        let exp = 1928
+        #expect(checksum(parseExpanded(input)) == exp)
     }
 
     @Test func part1() throws {
