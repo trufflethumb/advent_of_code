@@ -253,7 +253,7 @@ import Testing
 
 @Suite("Day06") struct Day06 {
 
-    let input = """
+    static let input = """
     ....#.....
     .........#
     ..........
@@ -267,7 +267,7 @@ import Testing
     """
 
     @Test(.disabled()) func part1() throws {
-        #expect(try walkAll(input) == 41)
+        #expect(try walkAll(Day06.input) == 41)
         #expect(try walkAll(try parse(6)) == 5551)
 
         let edgeCase = """
@@ -278,36 +278,42 @@ import Testing
         #expect(try walkAll(edgeCase) == 2)
     }
 
-    @Test(.disabled()) func testDetectLoop() throws {
-        let loop = """
-        ....#.....
-        ......#..#
-        ..........
-        ..#.......
-        .......#..
-        ..........
-        .#.#^.....
-        .....#..#.
-        #.........
-        ......#...
-        """
+    @Suite("Day06Part2") struct Day06Part2 {
 
-        let (field, (row, col)) = try parseField(loop)
-        #expect(detectLoop(field, row, col, startDir: 0))
-    }
+        @Test() func testDetectLoop() throws {
+            let loop = """
+            ....#.....
+            ......#..#
+            ..........
+            ..#.......
+            .......#..
+            ..........
+            .#.#^.....
+            .....#..#.
+            #.........
+            ......#...
+            """
 
-    @Test(.disabled()) func detectFalseLoop() throws {
-        let (field, (row, col)) = try parseField(input)
-        #expect(detectLoop(field, row, col, startDir: 0) == false)
-    }
+            let (field, (row, col)) = try parseField(loop)
+            #expect(detectLoop(field, row, col, startDir: 0))
+        }
 
-    @Test(.disabled("Failed for final test")) func part2() throws {
-        let (field, (row, col)) = try parseField(input)
-        #expect(countAllLoops(field, row, col) == 6)
+        @Test() func detectFalseLoop() throws {
+            let (field, (row, col)) = try parseField(Day06.input)
+            #expect(detectLoop(field, row, col, startDir: 0) == false)
+        }
 
-//        856 is too low, 2171 is too high
-        let (aField, (aRow, aCol)) = try parseField(try parse(6))
-        print(countAllLoops(aField, aRow, aCol))
+        @Test() func countLoopsInExample() throws {
+            let (field, (row, col)) = try parseField(Day06.input)
+            #expect(countAllLoops(field, row, col) == 6)
+        }
+
+        @Test() func part2() throws {
+            let (aField, (aRow, aCol)) = try parseField(try parse(6))
+            let loops = countAllLoops(aField, aRow, aCol)
+            #expect(loops > 856)
+            #expect(loops < 2171)
+        }
     }
 }
 
