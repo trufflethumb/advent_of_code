@@ -350,9 +350,12 @@ import Testing
         p(debugInfo(result, digits))
     }
 
-    func debugFreeDisk(_ disk: [Int]) -> String {
+    func debugFreeDisk(_ disk: [Int], _ first: Int? = nil) -> String {
         var result = ""
         for (i, e) in disk.enumerated() {
+            if let first, i > first {
+                break
+            }
             if i % 2 == 0 {
                 result.append("_")
             } else {
@@ -520,6 +523,17 @@ import Testing
         let expandedBlocks = expandBlocks(disk)
         let result = moveWholeFile(disk, expandedBlocks)
         let expected = "0076.11155222244333......"
+        let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
+        if result != parseExpanded(expected) {
+            Issue.record(comment)
+        }
+    }
+
+    @Test() func part2Example4() {
+        let disk = parseDisk("23311010101")
+        let expandedBlocks = expandBlocks(disk)
+        let result = moveWholeFile(disk, expandedBlocks)
+        let expected = "005431112...."
         let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
         if result != parseExpanded(expected) {
             Issue.record(comment)
