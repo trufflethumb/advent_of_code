@@ -344,7 +344,6 @@ import Testing
 }
 
 @Suite("Day09") struct Day09 {
-    let input = "2333133121414131402"
 
     @Suite("Day09Part1") struct Day09Part1 {
         @Test func testExpandBlocks() {
@@ -395,63 +394,69 @@ import Testing
         }
     }
 
-    @Test func testMakeConversionTable() {
-        let input = "123456"
-        // "0..111....22222......"
-        let exp = [0, 1, 3, 6, 10, 15]
-        #expect(makeConversionTable(parseDisk(input)) == exp)
-    }
+    @Suite("Day02Part2") struct Day09Part2 {
+        let input = "2333133121414131402"
 
-    @Test func part2Example1() {
-        let disk = parseDisk("123324212")
-        let expandedBlocks = expandBlocks(disk)
-        // 0..111...22....33.44
-        let expected = "04411133.22........."
-        let result = moveWholeFile(disk, expandedBlocks)
-        let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
-        if result != parseExpanded(expected) {
-            Issue.record(comment)
+        @Test func part2Example1() {
+            let disk = parseDisk("123324212")
+            let expandedBlocks = expandBlocks(disk)
+            // 0..111...22....33.44
+            let expected = "04411133.22........."
+            let result = moveWholeFile(disk, expandedBlocks)
+            let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
+            if result != parseExpanded(expected) {
+                Issue.record(comment)
+            }
         }
-    }
 
-    @Test() func part2Example2() {
-        let disk = parseDisk(input)
-        let expandedBlocks = expandBlocks(disk)
-        let result = moveWholeFile(disk, expandedBlocks)
-        let expected = "00992111777.44.333....5555.6666.....8888.."
-        let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
-        if result != parseExpanded(expected) {
-            Issue.record(comment)
+        @Test() func part2Example2() {
+            let disk = parseDisk(input)
+            let expandedBlocks = expandBlocks(disk)
+            let result = moveWholeFile(disk, expandedBlocks)
+            let expected = "00992111777.44.333....5555.6666.....8888.."
+            let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
+            if result != parseExpanded(expected) {
+                Issue.record(comment)
+            }
+            #expect(checksum(result) == 2858)
         }
-        #expect(checksum(result) == 2858)
-    }
 
-    @Test() func part2Example3() {
-        let disk = parseDisk("233242302020101")
-        let expandedBlocks = expandBlocks(disk)
-        let result = moveWholeFile(disk, expandedBlocks)
-        let expected = "0076.11155222244333......"
-        let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
-        if result != parseExpanded(expected) {
-            Issue.record(comment)
+        @Test() func part2Example3() {
+            let disk = parseDisk("233242302020101")
+            let expandedBlocks = expandBlocks(disk)
+            let result = moveWholeFile(disk, expandedBlocks)
+            let expected = "0076.11155222244333......"
+            let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
+            if result != parseExpanded(expected) {
+                Issue.record(comment)
+            }
         }
-    }
 
-    @Test() func part2Example4() {
-        let disk = parseDisk("23311010101")
-        let expandedBlocks = expandBlocks(disk)
-        let result = moveWholeFile(disk, expandedBlocks)
-        let expected = "005431112...."
-        let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
-        if result != parseExpanded(expected) {
-            Issue.record(comment)
+        @Test() func part2Example4() {
+            let disk = parseDisk("23311010101")
+            let expandedBlocks = expandBlocks(disk)
+            let result = moveWholeFile(disk, expandedBlocks)
+            let expected = "005431112...."
+            let comment = Comment(stringLiteral: "\n" + debugInfo(result) + "\n" + expected)
+            if result != parseExpanded(expected) {
+                Issue.record(comment)
+            }
         }
-    }
 
-    @Test() func part2() throws {
-        let disk = parseDisk(try parse(9))
-        let expandedBlocks = expandBlocks(disk)
-        let result = moveWholeFile(disk, expandedBlocks)
-        #expect(checksum(result) != 6294368918299)
+        @Test(.disabled("This test runs for 8.66 seconds")) func part2() throws {
+            let disk = parseDisk(try parse(9))
+            let expandedBlocks = expandBlocks(disk)
+            let result = moveWholeFile(disk, expandedBlocks)
+            let checksum = checksum(result)
+            #expect(checksum == 6272188244509)
+        }
+
+        // This is for a function that didn't make it to the final solution
+        @Test func testMakeConversionTable() {
+            let input = "123456"
+            // "0..111....22222......"
+            let exp = [0, 1, 3, 6, 10, 15]
+            #expect(makeConversionTable(parseDisk(input)) == exp)
+        }
     }
 }

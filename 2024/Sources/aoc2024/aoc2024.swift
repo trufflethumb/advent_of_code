@@ -1,13 +1,6 @@
+// comment out line 3 to disable printing for debugging
+// in the future, learn how to use os.log
 func p(_ string: @autoclosure () -> String) {
-    if T.shouldPrint {
-        print(string())
-    }
+    print(string())
 }
 
-actor T {
-    static var shouldPrint = false
-
-    static func p() {
-        Self.shouldPrint = true
-    }
-}

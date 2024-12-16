@@ -94,8 +94,9 @@ func debugInfo(_ result: [Int?], _ digits: Int? = nil) -> String {
     return currentValue
 }
 
+// MARK: from this to the next marker was an incorrect attempt
 
-func moveWholeFile(_ disk: [Int], _ expandedDisk: [Int?]) -> [Int?] {
+func moveWholeFile2(_ disk: [Int], _ expandedDisk: [Int?]) -> [Int?] {
     var expandedDisk = expandedDisk
     var disk = disk
     var condenseDiskSourceReadIndex = disk.count - 1
@@ -154,4 +155,83 @@ func makeConversionTable(_ disk: [Int]) -> [Int] {
         currentIndex += number
     }
     return result
+}
+
+// MARK: code that worked for part 2
+// note: there's got to be a more efficient way to do it
+
+func spaceNeeded(_ rhs: Int, _ disk: [Int?]) -> (index: Int, count: Int)? {
+    var rhs = rhs
+    while rhs >= 0, disk[rhs] == nil {
+        rhs -= 1
+    }
+
+    if rhs < 0 {
+        return nil
+    }
+
+    var indicesToRemove = 0
+    var prevNumber = disk[rhs - indicesToRemove]
+    while prevNumber != nil, disk[rhs] == prevNumber {
+        indicesToRemove += 1
+        if rhs == indicesToRemove {
+            return nil
+        }
+        prevNumber = disk[rhs - indicesToRemove]
+    }
+    return (rhs, indicesToRemove)
+}
+
+func findSpace(count: Int, _ lhs: Int, _ disk: [Int?]) -> Int? {
+    var lhs = lhs
+    while lhs < disk.count {
+        while lhs < disk.count, disk[lhs] != nil {
+            lhs += 1
+        }
+
+        if lhs == disk.count {
+            return nil
+        }
+
+        var indicesToFill = 0
+        while lhs + indicesToFill < disk.count, disk[lhs + indicesToFill] == nil {
+            indicesToFill += 1
+        }
+
+        if indicesToFill < count {
+            lhs += 1
+        } else {
+            return lhs
+        }
+    }
+    return lhs
+}
+
+func moveWholeFile(_ disk: [Int], _ expandedDisk: [Int?]) -> [Int?] {
+    var expandedDisk = expandedDisk
+    var rhs = expandedDisk.count - 1
+
+    while rhs > 0 {
+        guard let (sourceIndex, spaces) = spaceNeeded(rhs, expandedDisk) else {
+            // searched all numbers and we are done
+            return expandedDisk
+        }
+
+        guard let destIndex = findSpace(count: spaces, 0, expandedDisk) else {
+            // Didn't find \(spaces) spaces at lhs = \(lhs) for rhs = \(rhs) having number \(expandedDisk[rhs]?.description ?? "."), looking left")
+            rhs -= spaces
+            continue
+        }
+
+        guard sourceIndex > destIndex else {
+            rhs = sourceIndex - spaces
+            continue
+        }
+
+        for i in 0 ..< spaces {
+            expandedDisk.swapAt(sourceIndex - i, destIndex + i)
+            rhs -= 1
+        }
+    }
+    return expandedDisk
 }
