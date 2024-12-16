@@ -59,7 +59,7 @@ func defrag(_ expandedDisk: [Int?]) -> [Int?] {
 func checksum(_ defraged: [Int?]) -> Int {
     var result = 0
     for (index, element) in defraged.enumerated() {
-        guard let element else { break }
+        guard let element else { continue }
         result += index * element
     }
     return result
