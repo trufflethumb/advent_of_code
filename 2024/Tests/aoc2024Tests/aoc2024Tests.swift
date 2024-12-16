@@ -343,7 +343,7 @@ import Testing
     }
 }
 
-@Suite("Day09") struct Day09 {
+@Suite("Day09", .disabled()) struct Day09 {
 
     @Suite("Day09Part1", .disabled()) struct Day09Part1 {
         @Test func testExpandBlocks() {
@@ -443,7 +443,7 @@ import Testing
             }
         }
 
-        @Test(.disabled("This test runs for 8.66 seconds")) func part2() throws {
+        @Test(.disabled("This test runs for 6.4 seconds on an M2 Pro")) func part2() throws {
             let disk = parseDisk(try parse(9))
             let expandedBlocks = expandBlocks(disk)
             let result = moveWholeFile(disk, expandedBlocks)

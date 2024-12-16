@@ -185,21 +185,20 @@ func spaceNeeded(_ rhs: Int, _ disk: [Int?]) -> (index: Int, count: Int)? {
 func findSpace(count: Int, _ disk: [Int?]) -> Int? {
     var lhs = 0
     while lhs < disk.count {
-        while lhs < disk.count, disk[lhs] != nil {
+
+        while disk[lhs] != nil {
             lhs += 1
+            continue
         }
 
-        if lhs == disk.count {
-            return nil
+        var contiguousSpaces = 1
+
+        while contiguousSpaces < count, lhs + contiguousSpaces < disk.count, disk[lhs + contiguousSpaces] == nil {
+            contiguousSpaces += 1
         }
 
-        var indicesToFill = 0
-        while lhs + indicesToFill < disk.count, disk[lhs + indicesToFill] == nil {
-            indicesToFill += 1
-        }
-
-        if indicesToFill < count {
-            lhs += 1
+        if contiguousSpaces < count {
+            lhs += contiguousSpaces
         } else {
             return lhs
         }
