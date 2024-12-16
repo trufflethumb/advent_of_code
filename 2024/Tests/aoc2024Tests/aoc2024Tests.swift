@@ -346,33 +346,6 @@ import Testing
 @Suite("Day09") struct Day09 {
     let input = "2333133121414131402"
 
-    func printFirst(_ result: [Int?], _ digits: Int? = nil) {
-        p(debugInfo(result, digits))
-    }
-
-    func debugFreeDisk(_ disk: [Int], _ first: Int? = nil) -> String {
-        var result = ""
-        for (i, e) in disk.enumerated() {
-            if let first, i > first {
-                break
-            }
-            if i % 2 == 0 {
-                result.append("_")
-            } else {
-                result.append("\(e)")
-            }
-        }
-        return result
-    }
-
-    func debugInfo(_ result: [Int?], _ digits: Int? = nil) -> String {
-        var currentValue = ""
-        for i in 0 ..< min(digits ?? result.count, result.count) {
-            currentValue += result[i]?.description ?? "."
-        }
-        return currentValue
-    }
-
     @Suite("Day09Part1") struct Day09Part1 {
         @Test func testExpandBlocks() {
             let input = "12345"
@@ -422,76 +395,11 @@ import Testing
         }
     }
 
-    func moveWholeFile(_ disk: [Int], _ expandedDisk: [Int?]) -> [Int?] {
-        var expandedDisk = expandedDisk
-        var disk = disk
-        var condenseDiskSourceReadIndex = disk.count - 1
-        var conversion = makeConversionTable(disk)
-
-        while condenseDiskSourceReadIndex > 0 {
-            // find number of spots needed
-            p("---")
-            p(debugFreeDisk(disk))
-            printFirst(expandedDisk)
-            let numberOfSpotsNeeded = disk[condenseDiskSourceReadIndex]
-
-            // find next empty spot
-            let emptySpotIndex = findNextEmptySpotIndex(spaceNeeded: numberOfSpotsNeeded, modifiedDisk: disk)
-
-            if emptySpotIndex == -1 {
-                p("Looking at index \(condenseDiskSourceReadIndex), corresponds to number \(expandedDisk[conversion[condenseDiskSourceReadIndex]]?.description ?? "."), Skipping \(disk[condenseDiskSourceReadIndex])")
-                condenseDiskSourceReadIndex -= 2
-                continue
-            }
-
-            p("Looking at index \(condenseDiskSourceReadIndex), corresponds to number \(expandedDisk[conversion[condenseDiskSourceReadIndex]]?.description ?? "."), Need \(numberOfSpotsNeeded), found index \(emptySpotIndex), which corresponds to \(conversion[emptySpotIndex])")
-
-            let convertedEmptySpotIndex = conversion[emptySpotIndex]
-
-            let sourceIndex = conversion[condenseDiskSourceReadIndex]
-
-            guard convertedEmptySpotIndex < sourceIndex else { break }
-
-            for i in 0 ..< numberOfSpotsNeeded {
-                expandedDisk.swapAt(convertedEmptySpotIndex + i, sourceIndex + i)
-            }
-
-            disk[emptySpotIndex] -= numberOfSpotsNeeded
-            conversion[emptySpotIndex] += numberOfSpotsNeeded
-            condenseDiskSourceReadIndex -= 2
-        }
-
-        return expandedDisk
-    }
-
-    func findNextEmptySpotIndex(spaceNeeded: Int, modifiedDisk: [Int]) -> Int {
-        for i in stride(from: 1, to: modifiedDisk.count, by: 2) {
-            if modifiedDisk[i] >= spaceNeeded {
-                return i
-            }
-        }
-        return -1
-    }
-
     @Test func testMakeConversionTable() {
         let input = "123456"
         // "0..111....22222......"
         let exp = [0, 1, 3, 6, 10, 15]
         #expect(makeConversionTable(parseDisk(input)) == exp)
-    }
-
-    func makeConversionTable(_ disk: [Int]) -> [Int] {
-        var currentIndex = 0
-        var result = [Int]()
-        for number in disk {
-            result.append(currentIndex)
-            currentIndex += number
-        }
-        return result
-    }
-
-    func p(_ string: @autoclosure () -> String) {
-//        print(string())
     }
 
     @Test func part2Example1() {
