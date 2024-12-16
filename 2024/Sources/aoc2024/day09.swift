@@ -182,8 +182,8 @@ func spaceNeeded(_ rhs: Int, _ disk: [Int?]) -> (index: Int, count: Int)? {
     return (rhs, indicesToRemove)
 }
 
-func findSpace(count: Int, _ lhs: Int, _ disk: [Int?]) -> Int? {
-    var lhs = lhs
+func findSpace(count: Int, _ disk: [Int?]) -> Int? {
+    var lhs = 0
     while lhs < disk.count {
         while lhs < disk.count, disk[lhs] != nil {
             lhs += 1
@@ -217,7 +217,7 @@ func moveWholeFile(_ disk: [Int], _ expandedDisk: [Int?]) -> [Int?] {
             return expandedDisk
         }
 
-        guard let destIndex = findSpace(count: spaces, 0, expandedDisk) else {
+        guard let destIndex = findSpace(count: spaces, expandedDisk) else {
             // Didn't find \(spaces) spaces at lhs = \(lhs) for rhs = \(rhs) having number \(expandedDisk[rhs]?.description ?? "."), looking left")
             rhs -= spaces
             continue

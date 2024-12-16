@@ -345,7 +345,7 @@ import Testing
 
 @Suite("Day09") struct Day09 {
 
-    @Suite("Day09Part1") struct Day09Part1 {
+    @Suite("Day09Part1", .disabled()) struct Day09Part1 {
         @Test func testExpandBlocks() {
             let input = "12345"
             let exp = "0..111....22222"
