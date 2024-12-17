@@ -400,7 +400,7 @@ import Testing
         }
     }
 
-    @Suite("Day02Part2") struct Day09Part2 {
+    @Suite("Day09Part2") struct Day09Part2 {
         let input = "2333133121414131402"
 
         @Test func part2Example1() {
