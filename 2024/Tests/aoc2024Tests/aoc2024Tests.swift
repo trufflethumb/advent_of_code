@@ -521,6 +521,7 @@ import Testing
                 node?.children.insert(Node(value: towel[i]))
                 node = node?.child(towel[i])
             }
+            node?.children.insert(Node(value: "."))
             result[towel[0]] = head
         }
 
@@ -532,6 +533,32 @@ import Testing
         let towels = lines[0].components(separatedBy: ", ").map(Array.init)
         let designs = lines.dropFirst(2).map(Array.init)
         return (towels, designs)
+    }
+
+    func processLine(_ line: [Character], _ towels: [Character: Node]) -> Bool {
+        var i = 0
+        while i < line.count - 1 {
+            if let char = towels[line[i]] {
+                var j = i + 1
+                var child: Node? = char
+
+                while j < line.count {
+                    if let nextChild = child?.child(line[j]) {
+                        child = nextChild
+                    } else if child?.child(".") != nil {
+                        break
+                    } else {
+                        return false
+                    }
+                    j += 1
+                }
+                i = j
+            } else {
+                return false
+            }
+        }
+
+        return true
     }
 
     let input = """
@@ -559,5 +586,18 @@ import Testing
         for (_, v) in towelDict {
             print(treeString(v))
         }
+    }
+
+    @Test func testProcessLine() throws {
+        let (towels, designs) = parseTowels(input)
+        let towelDict = makeDict(towels)
+        #expect(processLine(designs[5], towelDict))
+        #expect(processLine(designs[7], towelDict) == false)
+        #expect(processLine(designs[0], towelDict))
+        #expect(processLine(designs[1], towelDict))
+        #expect(processLine(designs[2], towelDict))
+        #expect(processLine(designs[3], towelDict))
+        #expect(processLine(designs[4], towelDict) == false)
+        #expect(processLine(designs[6], towelDict))
     }
 }
