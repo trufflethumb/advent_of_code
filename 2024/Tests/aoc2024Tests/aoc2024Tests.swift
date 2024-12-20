@@ -466,3 +466,98 @@ import Testing
         }
     }
 }
+
+@Suite("Day19") struct Day19 {
+
+    class Node: Hashable, CustomStringConvertible, CustomDebugStringConvertible {
+        static func == (lhs: Day19.Node, rhs: Day19.Node) -> Bool {
+            lhs.value == rhs.value
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(value)
+        }
+
+        var value: Character
+        var children: Set<Node> = []
+
+        init(value: Character) {
+            self.value = value
+        }
+
+        func child(_ value: Character) -> Node? {
+            children.first { node in
+                node.value == value
+            }
+        }
+
+        var description: String {
+            String(value)
+        }
+
+        var debugDescription: String {
+            description
+        }
+    }
+
+    func treeString(_ node: Node, prefix: String = "") -> String {
+        // Start with the current node's description
+        var result = "\(prefix)\(node.description)\n"
+
+        // Recur for each child, adding to the result
+        for child in node.children {
+            result += treeString(child, prefix: prefix + "   ")
+        }
+        return result
+    }
+
+    func makeDict(_ towels: [[Character]]) -> [Character: Node] {
+        var result = [Character: Node]()
+
+        for towel in towels {
+            let head: Node? = result[towel[0], default: Node(value: towel[0])]
+            var node = head
+            for i in 1 ..< towel.count {
+                node?.children.insert(Node(value: towel[i]))
+                node = node?.child(towel[i])
+            }
+            result[towel[0]] = head
+        }
+
+        return result
+    }
+
+    func parseTowels(_ input: String) -> (towels: [[Character]], designs: [[Character]]) {
+        let lines = input.components(separatedBy: .newlines)
+        let towels = lines[0].components(separatedBy: ", ").map(Array.init)
+        let designs = lines.dropFirst(2).map(Array.init)
+        return (towels, designs)
+    }
+
+    let input = """
+    r, wr, b, g, bwu, rb, gb, br
+
+    brwrr
+    bggr
+    gbbr
+    rrbgbr
+    ubwu
+    bwurrg
+    brgr
+    bbrgwb
+    """
+
+    @Test func testParse() {
+        let (towels, _) = parseTowels(input)
+        let joined = String(towels.joined(separator: ", "))
+        #expect(joined == "r, wr, b, g, bwu, rb, gb, br")
+    }
+
+    @Test func testMakeDict() {
+        let (towels, _) = parseTowels(input)
+        let towelDict = makeDict(towels)
+        for (_, v) in towelDict {
+            print(treeString(v))
+        }
+    }
+}
