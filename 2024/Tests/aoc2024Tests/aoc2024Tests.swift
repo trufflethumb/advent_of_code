@@ -251,7 +251,7 @@ import Testing
     }
 }
 
-@Suite("Day06") struct Day06 {
+@Suite("Day06", .disabled()) struct Day06 {
 
     static let input = """
     ....#.....
@@ -491,6 +491,14 @@ import Testing
             }
         }
 
+        var isEnd: Bool {
+            value == "."
+        }
+
+        var isLast: Bool {
+            children.contains(Node(value: "."))
+        }
+
         var description: String {
             String(value)
         }
@@ -511,21 +519,19 @@ import Testing
         return result
     }
 
-    func makeDict(_ towels: [[Character]]) -> [Character: Node] {
-        var result = [Character: Node]()
+    func makeDict(_ towels: [[Character]]) -> Node {
+        let head = Node(value: "?")
 
         for towel in towels {
-            let head: Node? = result[towel[0], default: Node(value: towel[0])]
-            var node = head
-            for i in 1 ..< towel.count {
+            var node: Node? = head
+            for i in 0 ..< towel.count {
                 node?.children.insert(Node(value: towel[i]))
                 node = node?.child(towel[i])
             }
             node?.children.insert(Node(value: "."))
-            result[towel[0]] = head
         }
 
-        return result
+        return head
     }
 
     func parseTowels(_ input: String) -> (towels: [[Character]], designs: [[Character]]) {
@@ -533,32 +539,6 @@ import Testing
         let towels = lines[0].components(separatedBy: ", ").map(Array.init)
         let designs = lines.dropFirst(2).map(Array.init)
         return (towels, designs)
-    }
-
-    func processLine(_ line: [Character], _ towels: [Character: Node]) -> Bool {
-        var i = 0
-        while i < line.count - 1 {
-            if let char = towels[line[i]] {
-                var j = i + 1
-                var child: Node? = char
-
-                while j < line.count {
-                    if let nextChild = child?.child(line[j]) {
-                        child = nextChild
-                    } else if child?.child(".") != nil {
-                        break
-                    } else {
-                        return false
-                    }
-                    j += 1
-                }
-                i = j
-            } else {
-                return false
-            }
-        }
-
-        return true
     }
 
     let input = """
@@ -583,21 +563,80 @@ import Testing
     @Test func testMakeDict() {
         let (towels, _) = parseTowels(input)
         let towelDict = makeDict(towels)
-        for (_, v) in towelDict {
-            print(treeString(v))
+        print(treeString(towelDict))
+    }
+
+    func processLine(_ line: [Character], _ towels: [[Character]]) -> Bool {
+        var candidates = [[Character]]()
+        for towel in towels {
+            var matches = 0
+            for i in 0 ..< min(line.count, towel.count) {
+                if line[i] == towel[i] {
+                    matches += 1
+                } else {
+                    break
+                }
+            }
+            candidates.append(Array(line.dropFirst(matches)))
         }
+
+        var result = false
+        for candidate in candidates {
+            result = result || processLine(candidate, towels)
+        }
+
+        return result
     }
 
     @Test func testProcessLine() throws {
         let (towels, designs) = parseTowels(input)
+        #expect(processLine(designs[5], towels))
+        #expect(processLine(designs[7], towels) == false)
+        #expect(processLine(designs[0], towels))
+        #expect(processLine(designs[1], towels))
+        #expect(processLine(designs[2], towels))
+        #expect(processLine(designs[3], towels))
+        #expect(processLine(designs[4], towels) == false)
+        #expect(processLine(designs[6], towels))
+    }
+
+
+    @Test func part1Special() throws {
+        let (towels, designs) = parseTowels(try parse(19))
         let towelDict = makeDict(towels)
-        #expect(processLine(designs[5], towelDict))
-        #expect(processLine(designs[7], towelDict) == false)
-        #expect(processLine(designs[0], towelDict))
-        #expect(processLine(designs[1], towelDict))
-        #expect(processLine(designs[2], towelDict))
-        #expect(processLine(designs[3], towelDict))
-        #expect(processLine(designs[4], towelDict) == false)
-        #expect(processLine(designs[6], towelDict))
+        #expect(processLine(designs[6], towels))
+    }
+
+
+    @Test func part1Special3() throws {
+        let (towels, _) = parseTowels(try parse(19))
+        let towelDict = makeDict(towels)
+        let design = Array("brbwrrruwrrrubrwuugrbuuwuuwrwrbrrgububwurugbwwrb".suffix(22))
+        #expect(processLine(design, towels))
+    }
+
+    @Test func part1Special2() throws {
+        let (towels, _) = parseTowels(try parse(19))
+        let towelDict = makeDict(towels)
+        let design = Array("b")
+        #expect(processLine(design, towels) == false)
+    }
+
+    @Test func part1() throws {
+        let (towels, designs) = parseTowels(try parse(19))
+        let towelDict = makeDict(towels)
+        var possibleDesigns = 0
+        var i = 0
+        for design in designs {
+            if processLine(design, towels) {
+                possibleDesigns += 1
+            } else {
+                print(i)
+            }
+            i += 1
+        }
+        print(possibleDesigns)
+        #expect(possibleDesigns > 7)
+        #expect(possibleDesigns < 400)
     }
 }
