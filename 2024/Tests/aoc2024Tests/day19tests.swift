@@ -101,29 +101,41 @@ import aoc2024
         return recurse(line, root, memo: &memo)
     }
 
+    // Memoization is a critical technique here to avoid redundant calculations,
+    // in order to complete processing the input in reasonable time
     func processLine(_ line: [Character], _ root: Node) -> Bool {
+        // Use recursion because we are trying to solve a sub problem repeatedly
         func recurse(_ index: Int, _ line: [Character], _ root: Node, _ memo: inout [Int: Bool]) -> Bool {
             if let result = memo[index] {
                 return result
             }
 
             if index >= line.count {
+                // return true because we have reached the end of the line
+                // otherwise we would have returned false
                 return true
             }
 
             for i in index ... line.count {
+                // take different lengths of prefixes from the line
                 let prefix = line[index ..< i]
                 var currentNode: Node? = root
 
+                // traverse the trie with the prefix
                 for char in prefix {
+                    // if we found a match, continue traversing
                     if let next = currentNode?.children[char] {
                         currentNode = next
                     } else {
+                        // Otherwise, break out of the loop
+                        // We set currentNode to nil because this prefix is not in the trie
                         currentNode = nil
                         break
                     }
                 }
 
+                // If we found a match and we reached the end of the trie node
+                // we coutinue to solve the subproblem with the rest of the line
                 if let currentNode, currentNode.isEnd {
                     if recurse(i, line, root, &memo) {
                         memo[index] = true
