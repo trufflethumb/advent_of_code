@@ -9,9 +9,22 @@ import aoc2024
 
 @Suite("Day19") struct Day19 {
 
-    class Node {
+    class Node: Hashable {
+        var value: Character
         var children: [Character: Node] = [:]
         var isEnd = false
+
+        init(value: Character) {
+            self.value = value
+        }
+
+        static func == (lhs: Node, rhs: Node) -> Bool {
+            lhs.value == rhs.value
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(value)
+        }
     }
 
     func insertIntoTrie(_ root: Node, _ word: [Character]) {
@@ -20,7 +33,7 @@ import aoc2024
             if let next = node.children[char] {
                 node = next
             } else {
-                let newNode = Node()
+                let newNode = Node(value: char)
                 node.children[char] = newNode
                 node = newNode
             }
@@ -29,7 +42,7 @@ import aoc2024
     }
 
     func makeRoot(_ towels: [[Character]]) -> Node {
-        let root = Node()
+        let root = Node(value: "?")
         for towel in towels {
             insertIntoTrie(root, towel)
         }
@@ -62,7 +75,7 @@ import aoc2024
         #expect(joined == "r, wr, b, g, bwu, rb, gb, br")
     }
 
-    func processLine(_ line: [Character], _ root: Node) -> Bool {
+    func processLineGemini(_ line: [Character], _ root: Node) -> Bool {
         func recurse(_ line: [Character], _ root: Node, memo: inout [String: Bool]) -> Bool {
             if let result = memo[String(line)] {
                 return result
@@ -101,6 +114,46 @@ import aoc2024
         return recurse(line, root, memo: &memo)
     }
 
+    func processLine(_ line: [Character], _ root: Node) -> Bool {
+        func recurse(_ index: Int, _ line: [Character], _ root: Node, _ memo: inout [Int: Bool]) -> Bool {
+            if let result = memo[index] {
+                return result
+            }
+
+            if index >= line.count {
+                return true
+            }
+
+            for i in index ... line.count {
+                let prefix = line[index ..< i]
+                var currentNode: Node? = root
+
+                for char in prefix {
+                    if let next = currentNode?.children[char] {
+                        currentNode = next
+                    } else {
+                        currentNode = nil
+                        break
+                    }
+                }
+
+                if let currentNode, currentNode.isEnd {
+                    if recurse(i, line, root, &memo) {
+                        memo[index] = true
+                        return true
+                    }
+                }
+            }
+
+            memo[index] = false
+            return false
+        }
+
+        var memo: [Int: Bool] = [:]
+        return recurse(0, line, root, &memo)
+    }
+
+
     @Test func testProcessLine() throws {
         let (towelsArray, designs) = parseTowels(input)
         let towels = makeRoot(towelsArray)
@@ -119,6 +172,13 @@ import aoc2024
         let towels = makeRoot(towelsArray)
         let design = Array("brbwrrruwrrrubrwuugrbuuwuuwrwrbrrgububwurugbwwrb")
         #expect(processLine(design, towels) == false)
+    }
+
+    @Test func part1Special() throws {
+        let (towelsArray, _) = parseTowels(try parse(19))
+        let towels = makeRoot(towelsArray)
+        let design = Array("uwgwguuguruwggwbrbwurruwgwwwurgbgwggwwbbubgugguuurgugugwu")
+        #expect(processLine(design, towels) == true)
     }
 
     @Test func part1Special2() throws {
