@@ -9,22 +9,9 @@ import aoc2024
 
 @Suite("Day19") struct Day19 {
 
-    class Node: Hashable {
-        var value: Character
+    class Node {
         var children: [Character: Node] = [:]
         var isEnd = false
-
-        init(value: Character) {
-            self.value = value
-        }
-
-        static func == (lhs: Node, rhs: Node) -> Bool {
-            lhs.value == rhs.value
-        }
-
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(value)
-        }
     }
 
     func insertIntoTrie(_ root: Node, _ word: [Character]) {
@@ -33,7 +20,7 @@ import aoc2024
             if let next = node.children[char] {
                 node = next
             } else {
-                let newNode = Node(value: char)
+                let newNode = Node()
                 node.children[char] = newNode
                 node = newNode
             }
@@ -42,7 +29,7 @@ import aoc2024
     }
 
     func makeRoot(_ towels: [[Character]]) -> Node {
-        let root = Node(value: "?")
+        let root = Node()
         for towel in towels {
             insertIntoTrie(root, towel)
         }
